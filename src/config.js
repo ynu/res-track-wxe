@@ -1,16 +1,7 @@
-/**
- * React Starter Kit (https://www.reactstarterkit.com/)
- *
- * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.txt file in the root directory of this source tree.
- */
-
 /* eslint-disable max-len */
 
 export const port = process.env.PORT || 3000;
-export const host = process.env.WEBSITE_HOSTNAME || `localhost:${port}`;
+export const host = process.env.WEBSITE_HOSTNAME || `wx.nagu.cc:${port}`;
 
 export const databaseUrl = process.env.DATABASE_URL || 'sqlite:database.sqlite';
 
@@ -45,4 +36,20 @@ export const auth = {
     secret: process.env.TWITTER_CONSUMER_SECRET || 'KTZ6cxoKnEakQCeSpZlaUCJWGAlTEBJj0y2EMkUBujA7zWSvaQ',
   },
 
+};
+
+// Mongodb 数据库服务器Url
+export const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/jkef';
+
+export const profileCollection = process.env.PROFILE_COLLECTION || 'profiles';
+
+export const redisConfig = {
+  host: process.env.HOST_REDIS || 'localhost',
+  port: process.env.PORT_REDIS || 6379,
+};
+
+export const wxentConfig = {
+  corpId: process.env.WXE_CORPID,
+  secret: process.env.WXE_SECRET,
+  angetId: process.env.WXE_AGENTID || 5,
 };
