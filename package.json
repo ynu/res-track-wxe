@@ -1,0 +1,19 @@
+{
+  "name": "res-track-wxe",
+  "version": "0.0.1",
+  "description": "资源状态跟踪系统（微信企业号应用）",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ynu/res-track-wxe.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ynu/res-track-wxe/issues"
+  },
+  "homepage": "https://github.com/ynu/res-track-wxe#readme"
+}
