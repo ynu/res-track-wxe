@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+import ResourceManager from './api/resource-model';
 
 export const port = process.env.PORT || 3000;
 export const host = process.env.WEBSITE_HOSTNAME || `wx.nagu.cc:${port}`;
@@ -53,3 +54,5 @@ export const wxentConfig = {
   secret: process.env.WXE_SECRET,
   angetId: process.env.WXE_AGENTID || 5,
 };
+
+export const resourceManager = new ResourceManager(mongoUrl, 'resources');

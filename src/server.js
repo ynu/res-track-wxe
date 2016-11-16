@@ -31,6 +31,7 @@ import assets from './assets'; // eslint-disable-line import/no-unresolved
 import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
 import { port, auth } from './config';
+import resTrack from './api/res-track';
 
 const app = express();
 
@@ -48,7 +49,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+const morgan = require('morgan');
+app.use(morgan('dev'));
 //
 // Authentication
 // -----------------------------------------------------------------------------
@@ -75,6 +77,8 @@ app.get('/login/facebook/return',
 //
 // Register API middleware
 // -----------------------------------------------------------------------------
+app.use('/api/res-track', resTrack);
+
 app.use('/graphql', expressGraphQL(req => ({
   schema,
   graphiql: true,
