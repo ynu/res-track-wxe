@@ -19,7 +19,7 @@ export default class Panel extends React.Component {
     render() {
         const {children, className, access, ...others} = this.props;
         const cls = classNames({
-            weui_panel: true,
+            'weui-panel': true,
             weui_panel_access: access,
             [className]: className
         });
