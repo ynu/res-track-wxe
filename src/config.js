@@ -44,15 +44,12 @@ export const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/jkef';
 
 export const profileCollection = process.env.PROFILE_COLLECTION || 'profiles';
 
-export const redisConfig = {
-  host: process.env.HOST_REDIS || 'localhost',
-  port: process.env.PORT_REDIS || 6379,
-};
+export const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
 
 export const wxentConfig = {
   corpId: process.env.WXE_CORPID,
   secret: process.env.WXE_SECRET,
-  angetId: process.env.WXE_AGENTID || 5,
+  angetId: process.env.WXE_AGENTID || 28,
 };
 
 export const resourceManager = new ResourceManager(mongoUrl, 'resources');

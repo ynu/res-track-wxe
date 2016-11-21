@@ -30,7 +30,6 @@ export default {
     const resource = await getRes(id);
     const add = async values => {
       try {
-        console.log('#######', values.state);
         const data = await store.dispatch(addState(id, values.state));
         window.location = `/detail/${id}`;
       } catch (e) {

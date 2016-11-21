@@ -24,7 +24,6 @@ export default {
     } catch (msg) {
       error = { ret: OTHER_ERROR, msg };
     }
-    console.log('#####res:', resource);
     return {
       title: '详情',
       component: <Detail resource={resource} error={error} />,

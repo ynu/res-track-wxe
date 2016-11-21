@@ -4,10 +4,11 @@ eslint-disable no-param-reassign
 
 import { Router } from 'express';
 import { ObjectId } from 'mongodb';
-import * as auth from 'wxe-auth-express';
+// import * as auth from 'wxe-auth-express';
 import { SUCCESS, UNAUTHORIZED,
   OBJECT_ALREADY_EXISTS, SERVER_FAILED } from 'nagu-validates';
 import { resourceManager } from '../config';
+import * as auth from './controllers/wxe-auth-middlewares';
 
 const tryRun = func => {
   try {
@@ -17,6 +18,14 @@ const tryRun = func => {
   }
 };
 
+const getUserId = auth.getUserId(
+  'userId',
+  (userId, req, res, next) => {
+    req.userId = userId;
+    next();
+  },
+);
+
 // 获取当前用户的Id
 const getId = req => req.user.userid;
 
@@ -24,18 +33,19 @@ const router = new Router();
 
 router.put('/',
   // 1. 检查用户是否登录
-  // auth.getUserId(),
+  getUserId,
   // 2. 添加资源
   async (req, res) => {
-    const { name, catagory } = req.body;
+    console.log(req.body);
     try {
-      const resId = await resourceManager.add({
-        name,
-        catagory,
-      });
+      const initState = {
+        ...req.body.state,
+        creator: req.userId,
+      };
+      const resId = await resourceManager.add(req.body, initState);
       res.send({ ret: SUCCESS, data: resId });
     } catch (msg) {
-      res.send({ ret: SERVER_FAILED, msg });
+      res.send({ ret: SERVER_FAILED, msg: msg.toString() });
     }
   },
 );
@@ -57,7 +67,14 @@ router.get('/',
   // auth.getUserId(),
   async (req, res) => {
     try {
-      const data = await resourceManager.find();
+      let { before } = req.query;
+      if (before) {
+        before = new Date(before);
+      }
+      const data = await resourceManager.list({
+        ...req.query,
+        before,
+      });
       res.send({ ret: SUCCESS, data });
     } catch (msg) {
       res.send({ ret: SERVER_FAILED, msg });
@@ -66,22 +83,20 @@ router.get('/',
 );
 
 router.put('/:id/state',
-  // auth.getUserId(),
-  (req, res, next) => {
-    req.user = { userid: 'test' };
-    next();
-  },
+  getUserId,
   async (req, res) => {
-    const creator = req.user.userid;
+    const creator = req.userId;
     const resId = req.params.id;
     const { catagory, note } = req.body;
     try {
+      const _id = new ObjectId();
       await resourceManager.addState(new ObjectId(resId), {
+        _id,
         catagory,
         note,
         creator,
       });
-      res.send({ ret: SUCCESS });
+      res.send({ ret: SUCCESS, data: _id });
     } catch (msg) {
       res.send({ ret: SERVER_FAILED, msg });
     }
