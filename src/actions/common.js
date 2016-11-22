@@ -10,12 +10,12 @@ export const fetchFailed = error => ({
 
 export const fetching = (data = null) => ({
   type: FETCHING,
-  data,
+  data: data || '',
 });
 
 export const fetchDone = data => ({
   type: FETCH_DONE,
-  data,
+  data: data || '',
 });
 
 export const reset = () => ({

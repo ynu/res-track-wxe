@@ -1,13 +1,12 @@
 import { combineReducers } from 'redux';
-import { FETCHING, FETCH_FAILED } from '../actions/common';
-import { ADD_RESOURCE_DONE } from '../constants';
+import { FETCHING, FETCH_FAILED, FETCH_DONE } from '../actions/common';
 
 const loading = (state = false, action) => {
   switch (action.type) {
     case FETCHING:
       return true;
     case FETCH_FAILED:
-    case ADD_RESOURCE_DONE:
+    case FETCH_DONE:
       return false;
     default:
       return state;

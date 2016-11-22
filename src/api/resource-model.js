@@ -1,9 +1,14 @@
+/*
+eslint-disable no-param-reassign
+ */
+
 import EntityManagerMongoDB from 'entity-manager';
 import { REQUIRED, SERVER_FAILED, OBJECT_ALREADY_EXISTS } from 'nagu-validates';
+import { ObjectId } from 'mongodb';
 
 export default class ResourceManager extends EntityManagerMongoDB {
   // 添加资源
-  async add(res) {
+  async add(res, initState) {
     if (!res || !res.name || !res.catagory) {
       return Promise.reject({
         ret: REQUIRED,
@@ -11,12 +16,20 @@ export default class ResourceManager extends EntityManagerMongoDB {
       });
     }
     const { name, catagory } = res;
-    const initState = {
-      catagory: 'success',
-      note: '资源初始化成功',
-      creator: 'system',
+    initState = {
+      _id: new ObjectId(),
       date: new Date(),
+      ...initState,
     };
+    if (!initState.catagory || !initState.note || !initState.creator) {
+      return Promise.reject({
+        ret: REQUIRED,
+        msg: '状态信息必须指定catagory、note和creator',
+      });
+    }
+    if (!initState.date || !initState.date.getUTCDate) {
+      initState.date = new Date();
+    }
     const entity = {
       name,
       catagory,
@@ -38,21 +51,41 @@ export default class ResourceManager extends EntityManagerMongoDB {
 
   // 添加状态
   addState(resId, state) {
-    if (!resId) return Promise.reject({ ret: REQUIRED, msg: '必须制定资源Id' });
+    if (!resId) return Promise.reject({ ret: REQUIRED, msg: '必须指定资源Id' });
     if (!state || !state.catagory || !state.note || !state.creator) {
-      return Promise.reject({ ret: REQUIRED, msg: '状态信息不完全' });
+      return Promise.reject({ ret: REQUIRED, msg: '状态信息不完整' });
     }
-    return super.updateById(resId, {
-      $addToSet: {
-        states: {
-          ...state,
-          date: new Date(),
-        },
+    const newState = {
+      states: {
+        _id: new ObjectId(),
+        date: new Date(),
+        ...state,
       },
+    };
+    return super.updateById(resId, {
+      $addToSet: newState,
       $inc: { statesLength: 1 },
       $set: {
-        currentState: { ...state, date: new Date() },
+        currentState: newState,
       },
     });
+  }
+
+  list({ catagory, state, before } = {}) {
+    let query = {};
+    if (catagory) {
+      query = { ...query, catagory };
+    }
+    if (state) {
+      query = { ...query, 'currentState.catagory': state };
+    }
+    if (before) {
+      query = {
+        ...query,
+        states: { $elemMatch: { date: { $gte: before } } },
+      };
+    }
+    console.log(query, catagory, state);
+    return super.find({ query });
   }
 }

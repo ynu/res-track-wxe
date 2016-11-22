@@ -16,7 +16,7 @@ let AddState = ({
       <EnsureSingup />
       <div className="weui-flex">
             <div className="weui-flex__item">
-              <Button style={{ margin: '5px' }} type="default" size="small" plain href="/add" >
+              <Button style={{ margin: '5px' }} type="default" size="small" plain href="/" >
                 &lt; &lt; 资源列表
               </Button>
             </div>

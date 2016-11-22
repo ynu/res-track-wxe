@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import ResourceManager from './api/resource-model';
+import WxeApi from './api/models/wxeapi-client';
 
 export const port = process.env.PORT || 3000;
 export const host = process.env.WEBSITE_HOSTNAME || `wx.nagu.cc:${port}`;
@@ -40,7 +41,7 @@ export const auth = {
 };
 
 // Mongodb 数据库服务器Url
-export const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/jkef';
+export const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/test';
 
 export const profileCollection = process.env.PROFILE_COLLECTION || 'profiles';
 
@@ -53,3 +54,5 @@ export const wxentConfig = {
 };
 
 export const resourceManager = new ResourceManager(mongoUrl, 'resources');
+
+export const wxeapi = new WxeApi(wxentConfig);

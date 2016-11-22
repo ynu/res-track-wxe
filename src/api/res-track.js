@@ -1,10 +1,9 @@
 /*
-eslint-disable no-param-reassign
+eslint-disable no-param-reassign, no-underscore-dangle
  */
 
 import { Router } from 'express';
 import { ObjectId } from 'mongodb';
-// import * as auth from 'wxe-auth-express';
 import { SUCCESS, UNAUTHORIZED,
   OBJECT_ALREADY_EXISTS, SERVER_FAILED } from 'nagu-validates';
 import { resourceManager } from '../config';
@@ -26,9 +25,6 @@ const getUserId = auth.getUserId(
   },
 );
 
-// 获取当前用户的Id
-const getId = req => req.user.userid;
-
 const router = new Router();
 
 router.put('/',
@@ -36,11 +32,12 @@ router.put('/',
   getUserId,
   // 2. 添加资源
   async (req, res) => {
-    console.log(req.body);
     try {
       const initState = {
         ...req.body.state,
-        creator: req.userId,
+        creator: {
+          userId: req.userId,
+        },
       };
       const resId = await resourceManager.add(req.body, initState);
       res.send({ ret: SUCCESS, data: resId });
@@ -85,7 +82,7 @@ router.get('/',
 router.put('/:id/state',
   getUserId,
   async (req, res) => {
-    const creator = req.userId;
+    const userId = req.userId;
     const resId = req.params.id;
     const { catagory, note } = req.body;
     try {
@@ -94,7 +91,7 @@ router.put('/:id/state',
         _id,
         catagory,
         note,
-        creator,
+        creator: { userId },
       });
       res.send({ ret: SUCCESS, data: _id });
     } catch (msg) {
