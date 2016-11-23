@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import TimeAgo from 'timeago-react';
 import { getStateColor, getStateIcon } from '../common';
+import Avatar from './Avatar';
 
 const PageHeader = ({ name, catagory, note, creator, date }) => {
   const backgroundColor = getStateColor(catagory);
@@ -12,7 +13,7 @@ const PageHeader = ({ name, catagory, note, creator, date }) => {
       <p className="page__desc">
         {note}
         &nbsp;|
-        <img alt={creator.userId} src={`/api/avatar/${creator.userId}`} style={{ marginRight: '5px', width: '20px', height: '20px' }} />
+        <Avatar {...creator} />
         {creator.userId}
         &nbsp;| <TimeAgo datetime={date} locale="zh_CN" />
       </p>

@@ -48,7 +48,7 @@ router.put('/',
 );
 
 router.get('/:id',
-  // auth.getUserId(),
+  getUserId,
   async (req, res) => {
     try {
       const data = await resourceManager.findById(new ObjectId(req.params.id));

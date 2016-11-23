@@ -15,7 +15,7 @@ export const getResource = resId => async dispatch => {
     });
     const result = await res.json();
     if (result.ret === SUCCESS) {
-      dispatch(fetchDone);
+      dispatch(fetchDone(result.data));
       dispatch({
         type: GET_RESOURCE_FETCHED,
         data: result.data,
