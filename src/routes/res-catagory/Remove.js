@@ -1,30 +1,52 @@
 import React, { PropTypes } from 'react';
-import { Field, reduxForm, formValueSelector } from 'redux-form';
+import { connect } from 'react-redux';
 import weui from '../../components/Weui';
+import * as actions from '../../actions/weui';
 
-let Remove  = ({ catagories }) => {
-  const { Container, CellsTitle, Cells, Toast, ButtonArea, Button, Cell, CellHeader, CellBody, CellFooter } = weui;
+const Remove  = ({ catagories, remove, confirm, showConfirm, hideConfirm }) => {
+  const { Cells, Button, Cell, CellHeader, CellBody, CellFooter, Confirm } = weui;
+
   return (
     <div>
       <Cells>
-        <Cell>
-          <CellBody>
-            <Field component="select" name="_id" className="weui-input" placeholder="类别名称">
-              <option>请选择</option>
-              <option>e</option>
-            </Field>
-          </CellBody>
-          <CellFooter>
-            <Button type="default" size="small" plain >删除</Button>
-          </CellFooter>
-        </Cell>
+        {
+          catagories.map(({ _id, title, imageUrl }) => {
+            const confirmProps = {
+              title: '注意',
+              content: `删除资源类别将会使已使用此类别的资源无法显示。确定要删除【${title}】吗？`,
+              buttons: [{
+                label: '删除',
+                type: 'primary',
+                onClick: () => {
+                  hideConfirm();
+                  remove(_id);
+                },
+              }, {
+                label: '取消',
+                type: 'default',
+                onClick: hideConfirm,
+              }],
+            };
+            return (
+              <Cell key={_id}>
+                <CellHeader>
+                  <img src={imageUrl} alt="" style={{ width: '20px', marginRight: '5px', display: 'block' }} />
+                </CellHeader>
+                <CellBody>{title}({_id})</CellBody>
+                <CellFooter>
+                  <Button type="default" size="small" plain onClick={showConfirm.bind(this, confirmProps)}>删除</Button>
+                </CellFooter>
+              </Cell>
+            );
+          })
+        }
       </Cells>
+      <Confirm {...confirm} >{confirm.content}</Confirm>
     </div>
   );
 };
 
-Remove = reduxForm({
-  form: 'remove-res-catagory',
-})(Remove);
-
-export default Remove;
+const mapStateToProps = state => ({
+  confirm: state.confirm,
+});
+export default connect(mapStateToProps, { ...actions })(Remove);

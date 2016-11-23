@@ -7,7 +7,7 @@ export const getStateColor = catagory => {
     case 'error':
       return '#f2dede';
     default:
-      return '#000000';
+      return '#FFFFFF';
   }
 };
 

@@ -34,6 +34,7 @@ import { port, auth } from './config';
 import resTrack from './api/res-track';
 import wxeAuthCtrl from './api/wxe-auth';
 import avatarCtrl from './api/controllers/avatar';
+import resCatagoryCtrl from './api/controllers/res-catagory';
 
 const app = express();
 
@@ -83,6 +84,7 @@ app.get('/login/facebook/return',
 app.use('/api/res-track', resTrack);
 app.use('/api/wxe-auth', wxeAuthCtrl);
 app.use('/api/avatar', avatarCtrl);
+app.use('/api/res-catagory', resCatagoryCtrl);
 
 app.use('/graphql', expressGraphQL(req => ({
   schema,

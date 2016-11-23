@@ -7,7 +7,7 @@ import Label from './label';
 import Toast from './toast';
 // import Progress from './components/progress/index';
 // import ActionSheet from './components/actionsheet/index';
-// import Dialog from './components/dialog/index';
+import dialog from './dialog';
 // import Msg from './components/msg/index';
 // import Article from './components/article/index';
 // import Icon from './components/icon/index';
@@ -44,7 +44,7 @@ export default {
   Toast,
 //     Progress,
 //     ActionSheet,
-//     Dialog,
+  ...dialog,
 //     Msg,
 //     Article,
 //     Icon,

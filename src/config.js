@@ -1,9 +1,10 @@
 /* eslint-disable max-len */
 import ResourceManager from './api/resource-model';
 import WxeApi from './api/models/wxeapi-client';
+import ResCatagoryManager from './api/models/res-catagory';
 
 export const port = process.env.PORT || 3000;
-export const host = process.env.WEBSITE_HOSTNAME || `wx.nagu.cc:${port}`;
+export const host = process.env.WEBSITE_HOSTNAME || `res-track.itc.ynu.edu.cn:${port}`;
 
 export const databaseUrl = process.env.DATABASE_URL || 'sqlite:database.sqlite';
 
@@ -54,5 +55,6 @@ export const wxentConfig = {
 };
 
 export const resourceManager = new ResourceManager(mongoUrl, 'resources');
+export const resCatagoryManager = new ResCatagoryManager(mongoUrl, 'res_catagories');
 
 export const wxeapi = new WxeApi(wxentConfig);

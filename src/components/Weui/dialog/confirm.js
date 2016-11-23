@@ -24,9 +24,9 @@ class Confirm extends React.Component {
         return this.props.buttons.map((action, idx) => {
             const {type, label, ...others} = action;
             const className = classNames({
-                weui_btn_dialog: true,
-                default: type === 'default',
-                primary: type === 'primary'
+                'weui-dialog__btn': true,
+                'weui-dialog__btn_default': type === 'default',
+                'weui-dialog__btn_primary': type === 'primary'
             });
 
             return (
@@ -41,14 +41,14 @@ class Confirm extends React.Component {
         return (
             <div className="weui_dialog_confirm" style={{display: show ? 'block' : 'none'}}>
                 <Mask/>
-                <div className="weui_dialog">
-                    <div className="weui_dialog_hd">
-                        <strong className="weui_dialog_title">{title}</strong>
+                <div className="weui-dialog">
+                    <div className="weui-dialog__hd">
+                        <strong className="weui-dialog__title">{title}</strong>
                     </div>
-                    <div className="weui_dialog_bd">
+                    <div className="weui-dialog__bd">
                         {children}
                     </div>
-                    <div className="weui_dialog_ft">
+                    <div className="weui-dialog__ft">
                         {this.renderButtons()}
                     </div>
                 </div>

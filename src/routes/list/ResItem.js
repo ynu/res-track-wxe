@@ -2,8 +2,8 @@ import React, { PropTypes } from 'react';
 import { getStateColor, getStateIcon, getCatagoryImage } from '../common';
 
 const ResItem = ({ _id, catagory, currentState, name }) => {
-  const backgroundColor = getStateColor(catagory);
-  const icon = getStateIcon(catagory);
+  const backgroundColor = getStateColor(currentState.catagory);
+  const icon = getStateIcon(currentState.catagory);
 
   return (
     <a className="weui-cell weui-cell_access" href={`/Detail/${_id}`} style={{ backgroundColor }} >
