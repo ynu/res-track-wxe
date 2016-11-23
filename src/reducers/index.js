@@ -7,6 +7,7 @@ import toast from './toast';
 import list from './list';
 import resCatagories from './res-catagories';
 import confirm from './confirm';
+import detail from './detail';
 
 export default combineReducers({
   form,
@@ -15,6 +16,7 @@ export default combineReducers({
   list,
   resCatagories,
   confirm,
+  detail,
   user,
   runtime,
 });
