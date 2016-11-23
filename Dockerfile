@@ -1,4 +1,4 @@
-FROM node:5
+FROM node:7.1-alpine
 
 ADD package.json /rsk/
 ADD LICENSE.txt /rsk/
