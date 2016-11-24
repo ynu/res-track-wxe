@@ -10,7 +10,7 @@ import Footer from '../common/Footer';
 
 class List extends React.Component {
   render() {
-    const { resources, loading, filter } = this.props;
+    const { resources, loading, filter, resCatagories } = this.props;
     const { Container, SearchBar, CellsTitle, Cells, Toast, Button } = weui;
     const search = text => this.props.change('itemfilter', 'text', text);
     const filteredResources = resources.filter(res => filter ? res.name.includes(filter) : true);
@@ -20,16 +20,16 @@ class List extends React.Component {
         <EnsureSingup />
         <SearchBar onChange={search.bind(this)} />
         <CellsTitle>筛选</CellsTitle>
-        <Filter />
+        <Filter resCatagories={resCatagories} />
         <CellsTitle>共{filteredResources.length}个资源</CellsTitle>
         <Cells>
           {
             filteredResources.length
             ? filteredResources.map(res => <ResItem key={res._id} {...res} />)
             : (
-            <div className="weui-loadmore weui-loadmore_line">
-              <span className="weui-loadmore__tips">暂无数据</span>
-            </div>)
+              <div className="weui-loadmore weui-loadmore_line">
+                <span className="weui-loadmore__tips">暂无数据</span>
+              </div>)
           }
         </Cells>
         <Footer />
