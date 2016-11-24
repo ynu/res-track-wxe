@@ -30,7 +30,6 @@ class AddState extends React.Component {
             </Button>
           </div>
         </div>
-        { console.info(resource) }
         <PageHeader name={resource.name} {...resource.currentState} />
         <div className="page__bd">
           <CellsTitle>新状态</CellsTitle>

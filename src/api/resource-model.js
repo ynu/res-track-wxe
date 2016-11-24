@@ -56,14 +56,12 @@ export default class ResourceManager extends EntityManagerMongoDB {
       return Promise.reject({ ret: REQUIRED, msg: '状态信息不完整' });
     }
     const newState = {
-      states: {
-        _id: new ObjectId(),
-        date: new Date(),
-        ...state,
-      },
+      _id: new ObjectId(),
+      date: new Date(),
+      ...state,
     };
     return super.updateById(resId, {
-      $addToSet: newState,
+      $addToSet: { states: newState },
       $inc: { statesLength: 1 },
       $set: {
         currentState: newState,
