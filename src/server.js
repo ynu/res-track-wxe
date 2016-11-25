@@ -83,8 +83,8 @@ app.get('/login/facebook/return',
 // -----------------------------------------------------------------------------
 app.use('/api/res-track', resTrack);
 app.use('/api/wxe-auth', wxeAuthCtrl);
-app.use('/api/avatar', avatarCtrl);
 app.use('/api/res-catagory', resCatagoryCtrl);
+app.use('/avatars', avatarCtrl);
 
 app.use('/graphql', expressGraphQL(req => ({
   schema,
