@@ -6,6 +6,7 @@ import NewState from '../add/NewState';
 import PageHeader from '../detail/PageHeader';
 import EnsureSingup from '../common/EnsureSignupWxe';
 import * as actions from '../../actions/detail';
+import Footer from '../common/Footer';
 
 class AddState extends React.Component {
   componentDidMount() {
@@ -18,18 +19,6 @@ class AddState extends React.Component {
     return (
       <Container>
         <EnsureSingup />
-        <div className="weui-flex">
-          <div className="weui-flex__item">
-            <Button style={{ margin: '5px' }} type="default" size="small" plain href="/" >
-              &lt; &lt; 资源列表
-            </Button>
-          </div>
-          <div className="weui-flex__item" style={{ textAlign: 'right' }}>
-            <Button style={{ margin: '5px' }} type="default" size="small" plain href="/add" >
-              新增资源 &gt;&gt;
-            </Button>
-          </div>
-        </div>
         <PageHeader name={resource.name} {...resource.currentState} />
         <div className="page__bd">
           <CellsTitle>新状态</CellsTitle>
@@ -38,6 +27,7 @@ class AddState extends React.Component {
             <Button onClick={handleSubmit(addState)}>确定</Button>
           </ButtonArea>
         </div>
+        <Footer />
         <Toast loading show={loading} >加载中</Toast>
       </Container>
     );
