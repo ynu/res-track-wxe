@@ -12,7 +12,7 @@ import dialog from './dialog';
 // import Article from './components/article/index';
 // import Icon from './components/icon/index';
 // import {Grids, Grid, GridIcon, GridLabel} from './components/grid/index';
-import {Panel, PanelHeader, PanelBody, PanelFooter} from './panel';
+import panel from './panel';
 // import {MediaBox, MediaBoxHeader, MediaBoxBody, MediaBoxTitle, MediaBoxDescription, MediaBoxInfo, MediaBoxInfoMeta} from './components/mediabox/index';
 // import {Tab, TabBody, TabBodyItem, NavBar, NavBarItem, TabBar, TabBarItem, TabBarIcon, TabBarLabel} from './components/tab/index';
 import SearchBar from './searchbar';
@@ -52,7 +52,7 @@ export default {
 //     Grid,
 //     GridIcon,
 //     GridLabel,
-  // Panel,
+  ...panel,
 //     PanelHeader,
 //     PanelBody,
 //     PanelFooter,

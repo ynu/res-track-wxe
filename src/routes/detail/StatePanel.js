@@ -1,31 +1,41 @@
 import React, { PropTypes } from 'react';
 import TimeAgo from 'timeago-react';
 import { getStateColor, getStateIcon } from '../common';
+import weui from '../../components/Weui';
 
-const StatePanel = ({ catagory, creator, date, note }) => {
-  const backgroundColor = getStateColor(catagory);
-  const icon = getStateIcon(catagory);
-
+const StatePanel = ({ states, resId }) => {
+  const { Panel, PanelHeader } = weui;
   return (
-    <div className="weui-panel" style={{ backgroundColor }} key={date}>
-      <div className="weui-panel__bd">
-        <div className="weui-media-box weui-media-box_text">
-          <h4 className="weui-media-box__title">
-            <img alt={creator.userId} src={`/api/avatar/${creator.userId}`} style={{ marginRight: '5px', width: '32px', height: '32px' }} />
-            {creator.userId}
-          </h4>
-          <p className="weui-media-box__desc">
-            <i className={icon} />
-            {note}
-          </p>
-          <ul className="weui-media-box__info">
-            <li className="weui-media-box__info__meta">
-              <TimeAgo datetime={date} locale="zh_CN" />
-            </li>
-          </ul>
-        </div>
+    <Panel>
+      <div className="weui-panel__ft">
+        <a href={`/add-state/${resId}`} className="weui-cell weui-cell_access weui-cell_link">
+          <div className="weui-cell__bd">更新状态</div>
+          <span className="weui-cell__ft" />
+        </a>
       </div>
-    </div>
+      <div className="weui-panel__bd">
+        {
+          states.map(state => {
+            const backgroundColor = getStateColor(state.catagory);
+            const icon = getStateIcon(state.catagory);
+            return (
+              <a href="javascript:void(0);" className="weui-media-box weui-media-box_appmsg" style={{ backgroundColor }} key={state._id}>
+                <div className="weui-media-box__hd">
+                  <img className="weui-media-box__thumb" alt={state.creator.userId} src={`/api/avatar/${state.creator.userId}`} />
+                </div>
+                <div className="weui-media-box__bd">
+                  <h4 className="weui-media-box__title">
+                    {state.creator.userId} | <TimeAgo datetime={state.date} locale="zh_CN" />
+                  </h4>
+                  <p className="weui-media-box__desc">{state.note}</p>
+                </div>
+              </a>
+
+            );
+          })
+        }
+      </div>
+    </Panel>
   );
 };
 

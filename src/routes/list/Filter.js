@@ -20,6 +20,7 @@ class Filter extends React.Component {
     }
   }
   render() {
+    const { resCatagories } = this.props;
     const { Cells, Cell, CellHeader, CellBody, Label } = weui;
     return (
       <Cells>
@@ -30,9 +31,11 @@ class Filter extends React.Component {
           <CellBody>
             <Field component="select" name="catagory" className="weui-select">
               <option value="" >全部</option>
-              <option value="website">网站</option>
-              <option value="ip">IP地址</option>
-              <option value="ecard">一卡通</option>
+              {
+                resCatagories.map(catagory => (
+                  <option key={catagory._id} value={catagory._id} >{catagory.title}</option>
+                ))
+              }
             </Field>
           </CellBody>
         </div>
@@ -65,14 +68,12 @@ class Filter extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    initialValues: {
-      ...getFormValues('listFilter')(state),
-    },
-    params: getFormValues('listFilter')(state) || {},
-  };
-};
+const mapStateToProps = state => ({
+  initialValues: {
+    ...getFormValues('listFilter')(state),
+  },
+  params: getFormValues('listFilter')(state) || {},
+});
 export default connect(mapStateToProps, { ...actions })(reduxForm({
   form: 'listFilter',
 })(Filter));
