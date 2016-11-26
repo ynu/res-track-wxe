@@ -4,7 +4,7 @@ import WxeApi from './api/models/wxeapi-client';
 import ResCatagoryManager from './api/models/res-catagory';
 
 export const port = process.env.PORT || 3000;
-export const host = process.env.WEBSITE_HOSTNAME || `res-track.itc.ynu.edu.cn:${port}`;
+export const host = process.env.WEBSITE_HOSTNAME || `localhost:${port}`;
 
 export const databaseUrl = process.env.DATABASE_URL || 'sqlite:database.sqlite';
 

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import weui from '../../components/Weui';
 import NewState from './NewState';
 import EnsureSingup from '../common/EnsureSignupWxe';
+import Footer from '../common/Footer';
 
 const Add = (props) => {
   const { Container, Button, ButtonArea, CellsTitle, Cells, CellHeader, CellBody, Cell,
@@ -12,14 +13,6 @@ const Add = (props) => {
   return (
     <Container>
       <EnsureSingup />
-      <div className="weui-flex">
-          <div className="weui-flex__item">
-            <Button style={{ margin: '5px' }} type="default" size="small" plain href="/" >
-              &lt; &lt; 资源列表
-            </Button>
-          </div>
-          <div className="weui-flex__item"></div>
-      </div>
       <div className="page__hd">
         <h1 className="page__title">添加资源</h1>
         <p className="page__desc">添加帐号、IP地址、域名以便进行状态跟踪</p>
@@ -54,6 +47,7 @@ const Add = (props) => {
           <Button onClick={handleSubmit(submitRes)}>确定</Button>
         </ButtonArea>
       </div>
+      <Footer />
       <Toast loading show={loading} >加载中</Toast>
     </Container>
   );

@@ -9,7 +9,7 @@ const getResCatagories = async () => {
     const res = await fetch('/api/res-catagory');
     const result = await res.json();
     if (result.ret === SUCCESS) return result.data;
-    else throw result;
+    throw result;
   } catch (msg) {
     throw { ret: OTHER_ERROR, msg };
   }
