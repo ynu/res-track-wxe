@@ -35,6 +35,7 @@ import resTrack from './api/res-track';
 import wxeAuthCtrl from './api/wxe-auth';
 import avatarCtrl from './api/controllers/avatar';
 import resCatagoryCtrl from './api/controllers/res-catagory';
+import statCtrl from './api/controllers/stat';
 
 const app = express();
 
@@ -85,6 +86,7 @@ app.use('/api/res-track', resTrack);
 app.use('/api/wxe-auth', wxeAuthCtrl);
 app.use('/api/res-catagory', resCatagoryCtrl);
 app.use('/avatars', avatarCtrl);
+app.use('/api/stat', statCtrl);
 
 app.use('/graphql', expressGraphQL(req => ({
   schema,

@@ -12,6 +12,7 @@ export default {
     require('./list').default,
     require('./add-state').default,
     require('./res-catagory').default,
+    require('./stat').default,
     require('./home').default,
     require('./contact').default,
     require('./login').default,

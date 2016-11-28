@@ -18,7 +18,6 @@ const renderAvatarImage = (
 
     // 将头像存到本地
     const filename = getImageFileName(req, res);
-    console.log(filename);
     const dest = createWriteStream(filename);
     res2.body.pipe(dest);
     dest.on('close', () => next());
