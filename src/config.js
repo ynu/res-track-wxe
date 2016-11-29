@@ -19,7 +19,7 @@ export const analytics = {
 
 export const auth = {
 
-  jwt: { secret: process.env.JWT_SECRET || 'React Starter Kit' },
+  jwt: { secret: process.env.JWT_SECRET || 'res-track cokie key' },
 
   // https://developers.facebook.com/
   facebook: {
@@ -39,6 +39,13 @@ export const auth = {
     secret: process.env.TWITTER_CONSUMER_SECRET || 'KTZ6cxoKnEakQCeSpZlaUCJWGAlTEBJj0y2EMkUBujA7zWSvaQ',
   },
 
+  // 微信企业号
+  wxent: {
+    corpId: process.env.WXE_CORPID,
+    secret: process.env.WXE_SECRET,
+    angetId: process.env.WXE_AGENTID || 28,
+  },
+
 };
 
 // Mongodb 数据库服务器Url
@@ -48,13 +55,7 @@ export const profileCollection = process.env.PROFILE_COLLECTION || 'profiles';
 
 export const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
 
-export const wxentConfig = {
-  corpId: process.env.WXE_CORPID,
-  secret: process.env.WXE_SECRET,
-  angetId: process.env.WXE_AGENTID || 28,
-};
-
 export const resourceManager = new ResourceManager(mongoUrl, 'resources');
 export const resCatagoryManager = new ResCatagoryManager(mongoUrl, 'res_catagories');
 
-export const wxeapi = new WxeApi(wxentConfig);
+export const wxeapi = new WxeApi(auth.wxent);

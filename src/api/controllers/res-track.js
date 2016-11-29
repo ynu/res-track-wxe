@@ -3,40 +3,28 @@ eslint-disable no-param-reassign, no-underscore-dangle
  */
 
 import { Router } from 'express';
+import expressJwt from 'express-jwt';
 import { ObjectId } from 'mongodb';
-import { SUCCESS, UNAUTHORIZED,
-  OBJECT_ALREADY_EXISTS, SERVER_FAILED } from 'nagu-validates';
-import { resourceManager } from '../config';
-import * as auth from './controllers/wxe-auth-middlewares';
-
-const tryRun = func => {
-  try {
-    return func();
-  } catch (e) {
-    return null;
-  }
-};
-
-const getUserId = auth.getUserId(
-  'userId',
-  (userId, req, res, next) => {
-    req.userId = userId;
-    next();
-  },
-);
+import { SUCCESS, SERVER_FAILED } from 'nagu-validates';
+import { resourceManager, auth } from '../../config';
+import * as wxeAuth from '../controllers/wxe-auth-middlewares';
 
 const router = new Router();
 
 router.put('/',
   // 1. 检查用户是否登录
-  getUserId,
+  expressJwt({
+    secret: auth.jwt.secret,
+    credentialsRequired: true,
+    getToken: wxeAuth.getToken,
+  }),
   // 2. 添加资源
   async (req, res) => {
     try {
       const initState = {
         ...req.body.state,
         creator: {
-          userId: req.userId,
+          userId: req.user.UserId,
         },
       };
       const resId = await resourceManager.add(req.body, initState);
@@ -48,7 +36,11 @@ router.put('/',
 );
 
 router.get('/:id',
-  getUserId,
+  expressJwt({
+    secret: auth.jwt.secret,
+    credentialsRequired: true,
+    getToken: wxeAuth.getToken,
+  }),
   async (req, res) => {
     try {
       const data = await resourceManager.findById(new ObjectId(req.params.id));
@@ -61,7 +53,11 @@ router.get('/:id',
 
 // 获取列表
 router.get('/',
-  // auth.getUserId(),
+  expressJwt({
+    secret: auth.jwt.secret,
+    credentialsRequired: true,
+    getToken: wxeAuth.getToken,
+  }),
   async (req, res) => {
     try {
       let { before } = req.query;
@@ -80,9 +76,13 @@ router.get('/',
 );
 
 router.put('/:id/state',
-  getUserId,
+  expressJwt({
+    secret: auth.jwt.secret,
+    credentialsRequired: true,
+    getToken: wxeAuth.getToken,
+  }),
   async (req, res) => {
-    const userId = req.userId;
+    const userId = req.user.UserId;
     const resId = req.params.id;
     const { catagory, note } = req.body;
     try {
