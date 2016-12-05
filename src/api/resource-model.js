@@ -83,7 +83,53 @@ export default class ResourceManager extends EntityManagerMongoDB {
         states: { $elemMatch: { date: { $gte: before } } },
       };
     }
-    console.log(query, catagory, state);
     return super.find({ query });
+  }
+
+  async sumStatesLength() {
+    try {
+      const result = await super.aggregate([{
+        $project: { statesLength: 1 },
+      }, {
+        $group: {
+          _id: 'sum',
+          value: { $sum: '$statesLength' },
+        },
+      }]);
+      return result[0].value;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async countByCatagory() {
+    try {
+      const reducer = (obj, prev) => (prev.count++);
+      const result = await super.group(['catagory'], {}, { count: 0 }, reducer);
+      return result.map(row => ({ [row.catagory]: row.count }))
+        .reduce((prev, obj) => ({ ...prev, ...obj }), {});
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async countByCurrentState() {
+    try {
+      const reducer = (obj, prev) => (prev.count++);
+      const result = await super.group(['currentState.catagory'], {}, { count: 0 }, reducer);
+      return result.map(row => ({ [row['currentState.catagory']]: row.count }))
+        .reduce((prev, obj) => ({ ...prev, ...obj }), {});
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  countBeforeDate(date) {
+    const condition = {
+      'currentState.date': {
+        $lt: date,
+      },
+    };
+    return super.count(condition);
   }
 }

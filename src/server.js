@@ -31,10 +31,11 @@ import assets from './assets'; // eslint-disable-line import/no-unresolved
 import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
 import { port, auth } from './config';
-import resTrack from './api/res-track';
-import wxeAuthCtrl from './api/wxe-auth';
+import resTrack from './api/controllers/res-track';
+import wxeAuthCtrl from './api/controllers/wxe-auth';
 import avatarCtrl from './api/controllers/avatar';
 import resCatagoryCtrl from './api/controllers/res-catagory';
+import statCtrl from './api/controllers/stat';
 
 const app = express();
 
@@ -49,7 +50,7 @@ global.navigator.userAgent = global.navigator.userAgent || 'all';
 // Register Node.js middleware
 // -----------------------------------------------------------------------------
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cookieParser('res-track cokie key'));
+app.use(cookieParser(auth.jwt.secret));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const morgan = require('morgan');
@@ -83,8 +84,9 @@ app.get('/login/facebook/return',
 // -----------------------------------------------------------------------------
 app.use('/api/res-track', resTrack);
 app.use('/api/wxe-auth', wxeAuthCtrl);
-app.use('/api/avatar', avatarCtrl);
 app.use('/api/res-catagory', resCatagoryCtrl);
+app.use('/avatars', avatarCtrl);
+app.use('/api/stat', statCtrl);
 
 app.use('/graphql', expressGraphQL(req => ({
   schema,

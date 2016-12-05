@@ -9,7 +9,7 @@ import Footer from '../common/Footer';
 const Add = (props) => {
   const { Container, Button, ButtonArea, CellsTitle, Cells, CellHeader, CellBody, Cell,
     Toast, Label } = weui;
-  const { handleSubmit, noteLength, submitRes, loading } = props;
+  const { handleSubmit, noteLength, submitRes, loading, resCatagories } = props;
   return (
     <Container>
       <EnsureSingup />
@@ -26,9 +26,12 @@ const Add = (props) => {
             </CellHeader>
             <CellBody>
               <Field component="select" name="catagory" className="weui-select" >
-                <option value="website">网站</option>
-                <option value="ip">IP地址</option>
-                <option value="ecard">一卡通</option>
+                <option value="" >全部</option>
+                {
+                  resCatagories.map(catagory => (
+                    <option key={catagory._id} value={catagory._id} >{catagory.title}</option>
+                  ))
+                }
               </Field>
             </CellBody>
           </div>

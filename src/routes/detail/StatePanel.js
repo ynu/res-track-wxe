@@ -21,7 +21,7 @@ const StatePanel = ({ states, resId }) => {
             return (
               <a href="javascript:void(0);" className="weui-media-box weui-media-box_appmsg" style={{ backgroundColor }} key={state._id}>
                 <div className="weui-media-box__hd">
-                  <img className="weui-media-box__thumb" alt={state.creator.userId} src={`/api/avatar/${state.creator.userId}`} />
+                  <img className="weui-media-box__thumb" alt={state.creator.userId} src={`/avatars/${state.creator.userId}.png`} />
                 </div>
                 <div className="weui-media-box__bd">
                   <h4 className="weui-media-box__title">
