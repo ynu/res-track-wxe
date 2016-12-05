@@ -35,6 +35,14 @@ router.put('/',
   },
 );
 
+router.get('/:resId/:stateId',
+  async (req, res) => {
+    const resource = await resourceManager.findById(new ObjectId(req.params.resId));
+    const data = resource.states.find(state => (state._id.str === req.params.stateId));
+    res.send({ ret: SUCCESS, data });
+  }
+);
+
 router.get('/:id',
   expressJwt({
     secret: auth.jwt.secret,
