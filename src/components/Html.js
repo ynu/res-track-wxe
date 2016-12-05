@@ -45,6 +45,7 @@ function Html({ title, description, style, script, chunk, state, children }) {
         {analytics.google.trackingId && (
           <script src="https://www.google-analytics.com/analytics.js" async defer />
         )}
+        <script src="//res.wx.qq.com/open/js/jweixin-1.1.0.js" />
       </body>
     </html>
   );

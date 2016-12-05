@@ -4,7 +4,6 @@ import { auth } from '../../config';
 
 export const signin = ({
   wxeApiOpitons,
-  wxapi,
   getRedirectUrl = (req) => req.query.redirect_uri,
   getCallBackUrl = (req) => (`${req.protocol}://${req.get('Host')}${req.originalUrl}}`),
   success = (result, req, res) => {
@@ -21,9 +20,7 @@ export const signin = ({
   fail = (err, req, res) => res.send(fail),
 }) => async (req, res, next) => {
   try {
-    if (!wxapi) {
-      wxapi = new WxeApi(wxeApiOpitons); // eslint-disable-line no-param-reassign
-    }
+    const wxapi = new WxeApi(wxeApiOpitons);
     const callbackUrl = getCallBackUrl(req, res);
     // 1. 判断是否带有code参数，如果是的话，则说明已经从认证服务器返回
     if ('code' in req.query) {
