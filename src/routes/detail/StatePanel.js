@@ -27,7 +27,12 @@ const StatePanel = ({ states, resId }) => {
                   <h4 className="weui-media-box__title">
                     {state.creator.userId} | <TimeAgo datetime={state.date} locale="zh_CN" />
                   </h4>
-                  <p className="weui-media-box__desc">{state.note}</p>
+                  <p className="weui-media-box__desc">
+                    {state.note}
+                    {
+                      state.files && state.files.length ? ` | ${state.files.length}个附件` : null
+                    }
+                  </p>
                 </div>
               </a>
 

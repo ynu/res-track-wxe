@@ -36,7 +36,7 @@ router.put('/',
 
 router.get('/:fileId',
   async (req, res) => {
-    const fileBuffer = await fileManager.readFile(req.params.fileId);
+    const fileBuffer = await fileManager.readFile(new ObjectId(req.params.fileId));
     const fileInfo = imageType(fileBuffer);
     res.set('Content-Type', fileInfo.mime);
     res.send(fileBuffer);
