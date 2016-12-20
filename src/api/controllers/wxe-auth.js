@@ -29,7 +29,10 @@ router.get('/me',
 router.get('/jsconfig', async (req, res) => {
   const wxapi = new WxeApi(auth.wxent);
   try {
-    const data = await wxapi.getJsConfig(req.query);
+    const data = await wxapi.getJsConfig({
+      debug: false,
+      ...req.query,
+    });
     res.send({ ret: SUCCESS, data });
   } catch (msg) {
     console.log(msg);
