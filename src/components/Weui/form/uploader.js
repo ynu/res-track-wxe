@@ -15,7 +15,9 @@ export default class Uploader extends React.Component {
         onChange: PropTypes.func,
         onError: PropTypes.func,
         files: PropTypes.array,
-        lang: PropTypes.object
+        lang: PropTypes.object,
+        enableUpload: PropTypes.bool,
+        enableRemove: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -29,6 +31,8 @@ export default class Uploader extends React.Component {
             maxError: maxCount => `最多只能上传${maxCount}张图片`
         },
         onRemove: () => null,
+        enableUpload: true,
+        enableRemove: true,
     };
 
     constructor(props) {
@@ -205,7 +209,7 @@ export default class Uploader extends React.Component {
     }
 
     render(){
-        const { className, title, maxCount, files, onChange, onRemove, ...others } = this.props;
+        const { className, title, maxCount, files, onChange, onRemove, enableUpload, enableRemove, ...others } = this.props;
         const cls = classNames({
             'weui-uploader': true,
             [className]: className
@@ -225,11 +229,15 @@ export default class Uploader extends React.Component {
               onClick={hideGallery}
             >
               <span className="weui-gallery__img" style={{ backgroundImage: `url(${this.state.galleryImg.url})` }}/>
-              <div className="weui-gallery__opr">
-                <a href="javascript:" className="weui-gallery__del" onClick={removeImg} >
-                  <i className="weui-icon-delete weui-icon_gallery-delete" />
-                </a>
-              </div>
+              {
+                enableRemove && (
+                  <div className="weui-gallery__opr">
+                    <a href="javascript:" className="weui-gallery__del" onClick={removeImg} >
+                      <i className="weui-icon-delete weui-icon_gallery-delete" />
+                    </a>
+                  </div>
+                )
+              }
             </div>
             <div className={cls}>
                 <div className="weui-uploader__hd">
@@ -240,16 +248,20 @@ export default class Uploader extends React.Component {
                     <ul className="weui-uploader__files">
                         {this.renderFiles()}
                     </ul>
-                    <div className="weui-uploader__input-box">
-                        <input
-                        ref="uploader"//let react to reset after onchange
-                        className="weui-uploader__input"
-                        type="file"
-                        accept="image/jpg,image/jpeg,image/png,image/gif"
-                        onChange={this.handleChange.bind(this)}
-                        {...others}
-                        />
-                    </div>
+                    {
+                      enableUpload ? (
+                        <div className="weui-uploader__input-box">
+                            <input
+                            ref="uploader"//let react to reset after onchange
+                            className="weui-uploader__input"
+                            type="file"
+                            accept="image/jpg,image/jpeg,image/png,image/gif"
+                            onChange={this.handleChange.bind(this)}
+                            {...others}
+                            />
+                        </div>
+                      ) : null
+                    }
                 </div>
             </div>
           </div>
