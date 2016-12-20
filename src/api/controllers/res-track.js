@@ -92,13 +92,14 @@ router.put('/:id/state',
   async (req, res) => {
     const userId = req.user.UserId;
     const resId = req.params.id;
-    const { catagory, note } = req.body;
+    const { catagory, note, files } = req.body;
     try {
       const _id = new ObjectId();
       await resourceManager.addState(new ObjectId(resId), {
         _id,
         catagory,
         note,
+        files,
         creator: { userId },
       });
       res.send({ ret: SUCCESS, data: _id });

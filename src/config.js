@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
-import ResourceManager from './api/resource-model';
+import ResourceManager from './api/models/resource-model';
 import WxeApi from './api/models/wxeapi-client';
 import ResCatagoryManager from './api/models/res-catagory';
+import FileManager from './api/models/files';
 
 export const port = process.env.PORT || 3000;
 export const host = process.env.WEBSITE_HOSTNAME || `localhost:${port}`;
@@ -57,5 +58,6 @@ export const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
 
 export const resourceManager = new ResourceManager(mongoUrl, 'resources');
 export const resCatagoryManager = new ResCatagoryManager(mongoUrl, 'res_catagories');
+export const fileManager = new FileManager(mongoUrl, 'files');
 
 export const wxeapi = new WxeApi(auth.wxent);

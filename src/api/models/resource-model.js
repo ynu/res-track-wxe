@@ -1,5 +1,5 @@
 /*
-eslint-disable no-param-reassign
+eslint-disable no-param-reassign, no-underscore-dangle, no-plusplus
  */
 
 import EntityManagerMongoDB from 'entity-manager';
