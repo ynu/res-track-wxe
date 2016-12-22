@@ -6,52 +6,18 @@ import NewState from '../add/NewState';
 import PageHeader from '../detail/PageHeader';
 import EnsureSingup from '../common/EnsureSignupWxe';
 import * as actions from '../../actions/detail';
+import * as fileActions from '../../actions/files';
 import Footer from '../common/Footer';
 
 class AddState extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      files: [],
-    };
-  }
   componentDidMount() {
     const { getResource, resId } = this.props;
     getResource(resId);
   }
   render() {
-    const changePhoto = async file => {
-      // 上传图片到服务器
-      const data = new FormData();
-      data.append('file', file.nativeFile);
-      const res = await fetch('/api/files', {
-        credentials: 'same-origin',
-        method: 'PUT',
-        body: data,
-      });
-      const result = await res.json();
-
-      this.setState({
-        files: [
-          ...this.state.files,
-          {
-            url: file.data,
-            serverId: result.data,
-          },
-        ],
-      });
-    };
     const removePhoto = file => {
-      const files = this.state.files.filter(photo => photo.url !== file.url);
-      this.setState({ files });
-      const removedFile = this.state.files.find(photo => photo.url === file.url);
-      if (removedFile) {
-        console.log(removedFile.serverId);
-        fetch(`/api/files/${removedFile.serverId}`, {
-          credentials: 'same-origin',
-          method: 'DELETE',
-        });
-      }
+      const removedFile = this.props.files.find(photo => photo.url === file.url);
+      this.props.remove(removedFile.serverId);
     };
     const { Container, Button, ButtonArea, CellsTitle, Toast, Uploader, Cells, Cell, CellBody } = weui;
     const { handleSubmit, noteLength, addState, resource, loading } = this.props;
@@ -76,8 +42,8 @@ class AddState extends React.Component {
                 <Uploader
                   title="上传图片"
                   maxCount="9"
-                  files={this.state.files.map(file => ({ url: file.url }))}
-                  onChange={changePhoto}
+                  files={this.props.files}
+                  onChange={this.props.upload}
                   onRemove={removePhoto}
                 />
               </CellBody>
@@ -101,9 +67,13 @@ const mapStateToProps = state => {
     noteLength: note ? note.length : 0,
     loading: state.toast.loading,
     resource: state.detail,
+    files: state.uploader.files,
   };
 };
-export default connect(mapStateToProps, { ...actions })(reduxForm({
+export default connect(mapStateToProps, {
+  ...actions,
+  ...fileActions,
+})(reduxForm({
   form: 'resource',
   initialValues: {
     state: { catagory: 'success' },
