@@ -1,15 +1,28 @@
 import React, { PropTypes } from 'react';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
+// import { Gallery, GalleryDelete, Uploader } from 'react-weui';
 import weui from '../../components/Weui';
 import NewState from './NewState';
 import EnsureSingup from '../common/EnsureSignupWxe';
 import Footer from '../common/Footer';
+import * as fileActions from '../../actions/files';
 
 const Add = (props) => {
   const { Container, Button, ButtonArea, CellsTitle, Cells, CellHeader, CellBody, Cell,
-    Toast, Label } = weui;
+    Toast, Label, Uploader } = weui;
   const { handleSubmit, noteLength, submitRes, loading, resCatagories } = props;
+  const add = async values => await submitRes({
+    ...values,
+    state: {
+      ...values.state,
+      files: props.files.map(file => file.serverId),
+    },
+  });
+  const removePhoto = file => {
+    const removedFile = props.files.find(photo => photo.url === file.url);
+    props.remove(removedFile.serverId);
+  };
   return (
     <Container>
       <EnsureSingup />
@@ -46,8 +59,21 @@ const Add = (props) => {
         </Cells>
         <CellsTitle>初始状态</CellsTitle>
         <NewState noteLength={noteLength} />
+        <Cells>
+          <Cell>
+            <CellBody>
+              <Uploader
+                title="上传图片"
+                maxCount="9"
+                files={props.files}
+                onChange={props.upload}
+                onRemove={removePhoto}
+              />
+            </CellBody>
+          </Cell>
+        </Cells>
         <ButtonArea>
-          <Button onClick={handleSubmit(submitRes)}>确定</Button>
+          <Button onClick={handleSubmit(add)}>确定</Button>
         </ButtonArea>
       </div>
       <Footer />
@@ -62,9 +88,12 @@ const mapStateToProps = state => {
   return {
     noteLength: note ? note.length : 0,
     loading: state.toast.loading,
+    files: state.uploader.files,
   };
 };
-export default connect(mapStateToProps)(reduxForm({
+export default connect(mapStateToProps, {
+  ...fileActions,
+})(reduxForm({
   form: 'resource',
   initialValues: {
     catagory: 'website',

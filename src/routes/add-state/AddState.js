@@ -26,7 +26,7 @@ class AddState extends React.Component {
       ...values,
       state: {
         ...values.state,
-        files: this.state.files.map(file => file.serverId),
+        files: this.props.files.map(file => file.serverId),
       },
     });
     return (
