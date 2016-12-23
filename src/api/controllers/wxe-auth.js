@@ -6,7 +6,7 @@ import { host, auth } from '../../config';
 import WxeApi from '../models/wxeapi-client';
 
 const router = new Router();
-
+const wxapi = new WxeApi(auth.wxent);
 router.get('/',
   signin({
     wxeApiOpitons: auth.wxent,
@@ -27,12 +27,22 @@ router.get('/me',
 );
 
 router.get('/jsconfig', async (req, res) => {
-  const wxapi = new WxeApi(auth.wxent);
   try {
     const data = await wxapi.getJsConfig({
       debug: false,
       ...req.query,
+      jsApiList: JSON.parse(req.query.jsApiList),
     });
+    res.send({ ret: SUCCESS, data });
+  } catch (msg) {
+    console.log(msg);
+    res.send({ ret: SERVER_FAILED, msg });
+  }
+});
+
+router.get('/groupConfig', async (req, res) => {
+  try {
+    const data = await wxapi.getGroupConfig(req.query.url);
     res.send({ ret: SUCCESS, data });
   } catch (msg) {
     console.log(msg);
