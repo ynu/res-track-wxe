@@ -30,14 +30,17 @@ class AddState extends React.Component {
     const url = encodeURIComponent(window.location.href);
     let res = await fetch(`/api/wxe-auth/jsconfig?jsApiList=${JSON.stringify(jsApiList)}&url=${url}&debug=true`);
     const result = await res.json();
-    console.log(result);
     wx.config(result.data);
     wx.ready(async () => {
+      wx.checkJsApi({
+        jsApiList: ['openEnterpriseContact'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+        success(res) {
+          alert(JSON.stringify(res));
+        },
+      });
       res = await fetch(`/api/wxe-auth/groupConfig?url=${url}`);
       const result2 = await res.json();
-
       document.querySelector('#btnTest').onclick = function () {
-        console.log('##########');
         evalWXjsApi(() => {
           WeixinJSBridge.invoke('openEnterpriseContact', {
             ...result2.data,
@@ -52,6 +55,7 @@ class AddState extends React.Component {
                       // 'selectedUserIds' : [],    // 非必填，已选用户ID列表
             },
           }, (res) => {
+            alert(JSON.stringify(res));
             if (res.err_msg.indexOf('function_not_exist') > -1) {
               alert('版本过低请升级');
             } else if (res.err_msg.indexOf('openEnterpriseContact:fail') > -1) {
