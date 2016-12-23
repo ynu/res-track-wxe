@@ -159,7 +159,7 @@ class WxeApi {
     const nonceStr = createNonceStr();
     const signature = WxeApi.signGroupTicket(nonceStr, ticket, timestamp, url);
     return {
-      group_id,
+      groupId: group_id,
       timestamp,
       nonceStr,
       signature,
