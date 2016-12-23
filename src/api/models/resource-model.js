@@ -38,11 +38,11 @@ export default class ResourceManager extends EntityManagerMongoDB {
       states: [initState],
     };
     try {
-      const existObj = await super.findOne({ name, catagory });
+      const existObj = await this.findOne({ name, catagory });
       if (existObj) {
         return Promise.reject({ ret: OBJECT_ALREADY_EXISTS, msg: '资源已经存在' });
       }
-      const result = await super.insert(entity);
+      const result = await this.insert(entity);
       return Promise.resolve(result.insertedId);
     } catch (msg) {
       return Promise.reject({ ret: SERVER_FAILED, msg });
@@ -60,7 +60,7 @@ export default class ResourceManager extends EntityManagerMongoDB {
       date: new Date(),
       ...state,
     };
-    return super.updateById(resId, {
+    return this.updateById(resId, {
       $addToSet: { states: newState },
       $inc: { statesLength: 1 },
       $set: {
@@ -83,12 +83,12 @@ export default class ResourceManager extends EntityManagerMongoDB {
         states: { $elemMatch: { date: { $gte: before } } },
       };
     }
-    return super.find({ query });
+    return this.find({ query });
   }
 
   async sumStatesLength() {
     try {
-      const result = await super.aggregate([{
+      const result = await this.aggregate([{
         $project: { statesLength: 1 },
       }, {
         $group: {
@@ -105,7 +105,7 @@ export default class ResourceManager extends EntityManagerMongoDB {
   async countByCatagory() {
     try {
       const reducer = (obj, prev) => (prev.count++);
-      const result = await super.group(['catagory'], {}, { count: 0 }, reducer);
+      const result = await this.group(['catagory'], {}, { count: 0 }, reducer);
       return result.map(row => ({ [row.catagory]: row.count }))
         .reduce((prev, obj) => ({ ...prev, ...obj }), {});
     } catch (e) {
@@ -116,7 +116,7 @@ export default class ResourceManager extends EntityManagerMongoDB {
   async countByCurrentState() {
     try {
       const reducer = (obj, prev) => (prev.count++);
-      const result = await super.group(['currentState.catagory'], {}, { count: 0 }, reducer);
+      const result = await this.group(['currentState.catagory'], {}, { count: 0 }, reducer);
       return result.map(row => ({ [row['currentState.catagory']]: row.count }))
         .reduce((prev, obj) => ({ ...prev, ...obj }), {});
     } catch (e) {
@@ -130,6 +130,6 @@ export default class ResourceManager extends EntityManagerMongoDB {
         $lt: date,
       },
     };
-    return super.count(condition);
+    return this.count(condition);
   }
 }

@@ -11,6 +11,6 @@ export default class ResCatagoryManager extends EntityManagerMongoDB {
         msg: 'ID和title不能为空',
       });
     }
-    return super.insert(resCatagory);
+    return this.insert(resCatagory);
   }
 }
