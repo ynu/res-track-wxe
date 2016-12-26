@@ -48,16 +48,16 @@ class AddState extends React.Component {
                       // 'selectedUserIds' : [],    // 非必填，已选用户ID列表
             },
           }, (res) => {
-            const userList = [{
-              name: 'user1',
-              src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB/ElEQVR42u2VS6tBURTH7wcg7zcZMFNmBiiPSJkzEykzCUnJWBkqEwMiJgZKJgxMkKFXkpEPs25r1Tl53hzOde/g7Pp3ztlr7bV+7b32Ol9f/2WsViv4pAQAAeBpgH6/D06nE0KhEMxms88DpNNpEIvFIBKJoNlsfh5gOBxCIBCAWCwGy+XyraTr9ZrVr9bAeaJHehqgUqmAz+cDj8dzURculwvcbjfVRSKRYL9R8Xgc5vM5PwCZTAbkcjlIpVJ2DmtBIpGATCYjOHyiFAoFCX2j0Sg/ANlsFtRqNSiVSnau1WqBSqUCnU4HFosF6vU6DAYDUiQSAY1GQ9Dj8fh9gFwuR4kwKHO+7Xab5kwmE5RKJdjv97Db7Ui1Wg0MBgP5l8tlfgD0ej0FZBYjACZBgEajcRF4Op2C0Wgku9/v5w9Aq9XeAGCiTqdzE5yxBYNBfgAw4DUAQmGSfD5/EXgymbAAxWLxNYBzx0cAzBHY7XZYLBasLZVKkQ01Go24A1w7/lQDZrOZbDabDbxeLzgcDvJDWzgchu12yw3gnmOhUKCgeO3uAVSrVbBarXRN0Qd3KplMcu+EjxwPhwOcTifSdQ3gEfR6Pbp+TB/A/8XxeOQP4J663S7tCvYCBMA5pg9sNpvX/gVcADARsyv4zmUtLwB8SAD4fwDCEMZfjW9zZMwmOWHKlAAAAABJRU5ErkJggg==',
-              id: 'id1',
-            }, {
-              name: 'us1',
-              src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB/ElEQVR42u2VS6tBURTH7wcg7zcZMFNmBiiPSJkzEykzCUnJWBkqEwMiJgZKJgxMkKFXkpEPs25r1Tl53hzOde/g7Pp3ztlr7bV+7b32Ol9f/2WsViv4pAQAAeBpgH6/D06nE0KhEMxms88DpNNpEIvFIBKJoNlsfh5gOBxCIBCAWCwGy+XyraTr9ZrVr9bAeaJHehqgUqmAz+cDj8dzURculwvcbjfVRSKRYL9R8Xgc5vM5PwCZTAbkcjlIpVJ2DmtBIpGATCYjOHyiFAoFCX2j0Sg/ANlsFtRqNSiVSnau1WqBSqUCnU4HFosF6vU6DAYDUiQSAY1GQ9Dj8fh9gFwuR4kwKHO+7Xab5kwmE5RKJdjv97Db7Ui1Wg0MBgP5l8tlfgD0ej0FZBYjACZBgEajcRF4Op2C0Wgku9/v5w9Aq9XeAGCiTqdzE5yxBYNBfgAw4DUAQmGSfD5/EXgymbAAxWLxNYBzx0cAzBHY7XZYLBasLZVKkQ01Go24A1w7/lQDZrOZbDabDbxeLzgcDvJDWzgchu12yw3gnmOhUKCgeO3uAVSrVbBarXRN0Qd3KplMcu+EjxwPhwOcTifSdQ3gEfR6Pbp+TB/A/8XxeOQP4J663S7tCvYCBMA5pg9sNpvX/gVcADARsyv4zmUtLwB8SAD4fwDCEMZfjW9zZMwmOWHKlAAAAABJRU5ErkJggg==',
-              id: 'id2',
-            }];
-            selectEnterpriseContact({ userList });
+            // const userList = [{
+            //   name: 'user1',
+            //   src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB/ElEQVR42u2VS6tBURTH7wcg7zcZMFNmBiiPSJkzEykzCUnJWBkqEwMiJgZKJgxMkKFXkpEPs25r1Tl53hzOde/g7Pp3ztlr7bV+7b32Ol9f/2WsViv4pAQAAeBpgH6/D06nE0KhEMxms88DpNNpEIvFIBKJoNlsfh5gOBxCIBCAWCwGy+XyraTr9ZrVr9bAeaJHehqgUqmAz+cDj8dzURculwvcbjfVRSKRYL9R8Xgc5vM5PwCZTAbkcjlIpVJ2DmtBIpGATCYjOHyiFAoFCX2j0Sg/ANlsFtRqNSiVSnau1WqBSqUCnU4HFosF6vU6DAYDUiQSAY1GQ9Dj8fh9gFwuR4kwKHO+7Xab5kwmE5RKJdjv97Db7Ui1Wg0MBgP5l8tlfgD0ej0FZBYjACZBgEajcRF4Op2C0Wgku9/v5w9Aq9XeAGCiTqdzE5yxBYNBfgAw4DUAQmGSfD5/EXgymbAAxWLxNYBzx0cAzBHY7XZYLBasLZVKkQ01Go24A1w7/lQDZrOZbDabDbxeLzgcDvJDWzgchu12yw3gnmOhUKCgeO3uAVSrVbBarXRN0Qd3KplMcu+EjxwPhwOcTifSdQ3gEfR6Pbp+TB/A/8XxeOQP4J663S7tCvYCBMA5pg9sNpvX/gVcADARsyv4zmUtLwB8SAD4fwDCEMZfjW9zZMwmOWHKlAAAAABJRU5ErkJggg==',
+            //   id: 'id1',
+            // }, {
+            //   name: 'us1',
+            //   src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAB/ElEQVR42u2VS6tBURTH7wcg7zcZMFNmBiiPSJkzEykzCUnJWBkqEwMiJgZKJgxMkKFXkpEPs25r1Tl53hzOde/g7Pp3ztlr7bV+7b32Ol9f/2WsViv4pAQAAeBpgH6/D06nE0KhEMxms88DpNNpEIvFIBKJoNlsfh5gOBxCIBCAWCwGy+XyraTr9ZrVr9bAeaJHehqgUqmAz+cDj8dzURculwvcbjfVRSKRYL9R8Xgc5vM5PwCZTAbkcjlIpVJ2DmtBIpGATCYjOHyiFAoFCX2j0Sg/ANlsFtRqNSiVSnau1WqBSqUCnU4HFosF6vU6DAYDUiQSAY1GQ9Dj8fh9gFwuR4kwKHO+7Xab5kwmE5RKJdjv97Db7Ui1Wg0MBgP5l8tlfgD0ej0FZBYjACZBgEajcRF4Op2C0Wgku9/v5w9Aq9XeAGCiTqdzE5yxBYNBfgAw4DUAQmGSfD5/EXgymbAAxWLxNYBzx0cAzBHY7XZYLBasLZVKkQ01Go24A1w7/lQDZrOZbDabDbxeLzgcDvJDWzgchu12yw3gnmOhUKCgeO3uAVSrVbBarXRN0Qd3KplMcu+EjxwPhwOcTifSdQ3gEfR6Pbp+TB/A/8XxeOQP4J663S7tCvYCBMA5pg9sNpvX/gVcADARsyv4zmUtLwB8SAD4fwDCEMZfjW9zZMwmOWHKlAAAAABJRU5ErkJggg==',
+            //   id: 'id2',
+            // }];
+            // selectEnterpriseContact({ userList });
             if (!res) return;
             if (res.err_msg.indexOf('function_not_exist') > -1) {
               alert('版本过低请升级');
@@ -67,7 +67,7 @@ class AddState extends React.Component {
             }
             alert(res.result);
             const result = JSON.parse(res.result);    // 返回字符串，开发者需自行调用JSON.parse解析
-            // selectEnterpriseContact(res.result);
+            selectEnterpriseContact(res.result);
                   // var selectAll = result.selectAll;     // 是否全选（如果是，其余结果不再填充）
                   // if (!selectAll)
                   // {
