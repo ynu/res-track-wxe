@@ -90,6 +90,7 @@ router.put('/:id/state',
     getToken: wxeAuth.getToken,
   }),
   async (req, res) => {
+    console.log(req.body);
     const userId = req.user.UserId;
     const resId = req.params.id;
     const { catagory, note, files } = req.body;

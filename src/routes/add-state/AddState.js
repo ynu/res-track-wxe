@@ -21,19 +21,28 @@ const evalWXjsApi = function (jsApiFun) {
 };
 
 class AddState extends React.Component {
+
   async componentDidMount() {
-    const { getResource, resId, selectEnterpriseContact } = this.props;
+    const { getResource, resId } = this.props;
     getResource(resId);
 
+    this.configWx();
+  }
+
+  /**
+   * 配置微信企业号JSSDK
+   */
+  async configWx() {
     const jsApiList = ['openEnterpriseContact'];
-    const url = encodeURIComponent(window.location.href);
-    let res = await fetch(`/api/wxe-auth/jsconfig?jsApiList=${JSON.stringify(jsApiList)}&url=${url}&debug=true`);
+    const url = encodeURIComponent(window.location.href.split('#')[0]);
+    const res = await fetch(`/api/wxe-auth/jsconfig?jsApiList=${JSON.stringify(jsApiList)}&url=${url}&debug=true`);
     const result = await res.json();
     wx.config(result.data);
     wx.ready(async () => {
       res = await fetch(`/api/wxe-auth/groupConfig?url=${url}`);
       const result2 = await res.json();
-      document.querySelector('#btnTest').onclick = function () {
+      document.querySelector('#btnTest').onclick = () => {
+        const { userList } = this.props.selectedEnterpriseContact;
         evalWXjsApi(() => {
           WeixinJSBridge.invoke('openEnterpriseContact', {
             ...result2.data,
@@ -43,9 +52,9 @@ class AddState extends React.Component {
                       // 'userIds' : ['zhangsan','lisi'],    // 非必填，可选用户ID列表
               mode: 'multi',    // 必填，选择模式，single表示单选，multi表示多选
               type: ['user'],    // 必填，选择限制类型，指定department、tag、user中的一个或者多个
-                      // 'selectedDepartmentIds' : [],    // 非必填，已选部门ID列表
-                      // 'selectedTagIds' : [],    // 非必填，已选标签ID列表
-                      // 'selectedUserIds' : [],    // 非必填，已选用户ID列表
+              // selectedDepartmentIds: departmentList.map(dept => dept.id),    // 非必填，已选部门ID列表
+              // selectedTagIds: [],    // 非必填，已选标签ID列表
+              selectedUserIds: userList.map(user => user.id),    // 非必填，已选用户ID列表
             },
           }, (res) => {
             // const userList = [{
@@ -67,7 +76,11 @@ class AddState extends React.Component {
             }
             alert(res.result);
             const result = JSON.parse(res.result);    // 返回字符串，开发者需自行调用JSON.parse解析
-            selectEnterpriseContact(res.result);
+            if (result.selectAll) {
+              alert('系统暂不支持选择全部，请重新选择');
+              return;
+            }
+            this.props.selectEnterpriseContact(res.result);
                   // var selectAll = result.selectAll;     // 是否全选（如果是，其余结果不再填充）
                   // if (!selectAll)
                   // {
@@ -127,6 +140,7 @@ class AddState extends React.Component {
       state: {
         ...values.state,
         files: this.props.files.map(file => file.serverId),
+        sendTo: selectedEnterpriseContact.map(user => (user.id)),
       },
     });
     return (
