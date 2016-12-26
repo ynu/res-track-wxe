@@ -41,7 +41,7 @@ class AddState extends React.Component {
           WeixinJSBridge.invoke('openEnterpriseContact', {
             ...result2.data,
             params: {
-                      // 'departmentIds' : [0],    // 非必填，可选部门ID列表（如果ID为0，表示可选管理组权限下所有部门）
+              departmentIds: [0],    // 非必填，可选部门ID列表（如果ID为0，表示可选管理组权限下所有部门）
                       // 'tagIds' : [1],    // 非必填，可选标签ID列表（如果ID为0，表示可选所有标签）
                       // 'userIds' : ['zhangsan','lisi'],    // 非必填，可选用户ID列表
               mode: 'single',    // 必填，选择模式，single表示单选，multi表示多选
