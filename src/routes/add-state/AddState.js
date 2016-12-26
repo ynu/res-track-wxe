@@ -35,7 +35,7 @@ class AddState extends React.Component {
   async configWx() {
     const jsApiList = ['openEnterpriseContact'];
     const url = encodeURIComponent(window.location.href.split('#')[0]);
-    const res = await fetch(`/api/wxe-auth/jsconfig?jsApiList=${JSON.stringify(jsApiList)}&url=${url}&debug=true`);
+    let res = await fetch(`/api/wxe-auth/jsconfig?jsApiList=${JSON.stringify(jsApiList)}&url=${url}&debug=true`);
     const result = await res.json();
     wx.config(result.data);
     wx.ready(async () => {
