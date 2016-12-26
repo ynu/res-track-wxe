@@ -28,20 +28,16 @@ class AddState extends React.Component {
 
     const jsApiList = ['openEnterpriseContact'];
     const url = encodeURIComponent(window.location.href);
+    alert(url);
     let res = await fetch(`/api/wxe-auth/jsconfig?jsApiList=${JSON.stringify(jsApiList)}&url=${url}&debug=true`);
     const result = await res.json();
     wx.config(result.data);
     wx.ready(async () => {
-      wx.checkJsApi({
-        jsApiList: ['openEnterpriseContact'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
-        success(res) {
-          alert(JSON.stringify(res));
-        },
-      });
       res = await fetch(`/api/wxe-auth/groupConfig?url=${url}`);
       const result2 = await res.json();
       document.querySelector('#btnTest').onclick = function () {
         evalWXjsApi(() => {
+          alert(JSON.stringify(result2.data));
           WeixinJSBridge.invoke('openEnterpriseContact', {
             ...result2.data,
             params: {

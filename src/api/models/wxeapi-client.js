@@ -58,6 +58,24 @@ class WxeApi {
     //   });
   }
 
+  /*!
+ * 排序查询字符串
+ */
+  static raw(args) {
+    let keys = Object.keys(args);
+    keys = keys.sort();
+    const newArgs = {};
+    keys.forEach((key) => {
+      newArgs[key.toLowerCase()] = args[key];
+    });
+
+    let string = '';
+    for (const k in newArgs) {
+      string += `&${k}=${newArgs[k]}`;
+    }
+    return string.substr(1);
+  }
+
   static sign(nonceStr, jsapiTicket, timestamp, url) {
     const string = `jsapi_ticket=${jsapiTicket}&noncestr=${nonceStr}&timestamp=${timestamp}&url=${url}`;
     const shasum = crypto.createHash('sha1');
@@ -67,6 +85,14 @@ class WxeApi {
 
   static signGroupTicket(nonceStr, groupTicket, timestamp, url) {
     const string = `group_ticket=${groupTicket}&noncestr=${nonceStr}&timestamp=${timestamp}&url=${url}`;
+    const string2 = WxeApi.raw({
+      group_ticket: groupTicket,
+      nonceStr,
+      timestamp,
+      url,
+    });
+    console.log(string);
+    console.log('###########WWWW', string === string2);
     const shasum = crypto.createHash('sha1');
     shasum.update(string);
     return shasum.digest('hex');
