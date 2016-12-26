@@ -30,7 +30,6 @@ describe('wxent-api', () => {
     }, 28, {
       title: 'Title',
       description: 'desc',
-      content: 'content',
       url: 'http://www.ynu.edu.cn',
     });
     console.log(result);

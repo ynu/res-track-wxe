@@ -186,7 +186,7 @@ class WxeApi {
     const signature = WxeApi.signGroupTicket(nonceStr, ticket, timestamp, url);
     return {
       groupId: group_id,
-      timestamp,
+      timestamp: `${timestamp}`,
       nonceStr,
       signature,
     };
@@ -232,8 +232,10 @@ class WxeApi {
       };
     }
     let result;
+    console.log(JSON.stringify(body));
     try {
       const token = await this.getToken();
+      console.log(token);
       const res = await fetch(`${qyapiPrefix}/message/send?access_token=${token}`, {
         method: 'POST',
         body: JSON.stringify(body),
