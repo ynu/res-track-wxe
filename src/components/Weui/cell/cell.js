@@ -9,10 +9,11 @@ import classNames from 'classnames';
 
 export default class Cell extends React.Component {
     render() {
-        const {className, children, ...others} = this.props;
+        const {className, children, access, ...others} = this.props;
         const Component = this.props.href ? 'a' : this.props.htmlFor ? 'label' : 'div';
         const cls = classNames({
             'weui-cell': true,
+            'weui-cell_access': access,
             weui_check_label: this.props.htmlFor,
             weui_cell_switch: this.props.switch,
             weui_cells_radio: this.props.radio,

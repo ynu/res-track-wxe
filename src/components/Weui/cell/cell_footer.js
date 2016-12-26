@@ -11,7 +11,7 @@ export default class CellFooter extends React.Component {
     render() {
         const {className, children, ...others} = this.props;
         const cls = classNames({
-            weui_cell_ft: true,
+            'weui-cell__ft': true,
             [className]: className
         });
 
