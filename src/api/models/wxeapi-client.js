@@ -88,7 +88,7 @@ class WxeApi {
     const string2 = WxeApi.raw({
       group_ticket: groupTicket,
       nonceStr,
-      timestamp,
+      timestamp: `${timestamp}`,
       url,
     });
     console.log(string);
