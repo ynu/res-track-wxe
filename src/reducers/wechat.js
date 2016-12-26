@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { SELECT_ENTERPRISE_CONTACT } from '../actions/wechat';
 
-const selectdEnterpriseContact = (state = {
+const selectedEnterpriseContact = (state = {
   departmentList: [],
   tagList: [],
   userList: [],
@@ -15,5 +15,5 @@ const selectdEnterpriseContact = (state = {
 };
 
 export default combineReducers({
-  selectdEnterpriseContact,
+  selectedEnterpriseContact,
 });
