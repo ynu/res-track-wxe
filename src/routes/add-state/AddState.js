@@ -58,7 +58,7 @@ class AddState extends React.Component {
               type: ['user'],    // 必填，选择限制类型，指定department、tag、user中的一个或者多个
               // selectedDepartmentIds: departmentList.map(dept => dept.id),    // 非必填，已选部门ID列表
               // selectedTagIds: [],    // 非必填，已选标签ID列表
-              // selectedUserIds: userList.map(user => user.id),    // 非必填，已选用户ID列表
+              selectedUserIds: userList.map(user => user.id),    // 非必填，已选用户ID列表
             },
           }, (res) => {
             if (!res) return;
@@ -73,7 +73,7 @@ class AddState extends React.Component {
               alert('系统暂不支持选择全部，请重新选择');
               return;
             }
-            alert(res.result);
+            // alert(res.result);
             this.props.selectEnterpriseContact(result);
           });
         });
@@ -86,13 +86,13 @@ class AddState extends React.Component {
   // }
 
   renderSelectedUser() {
-    if (process.env.BROWSER) alert(`####::${JSON.stringify(this.props.selectedEnterpriseContact)}`);
+    // if (process.env.BROWSER) alert(`####::${JSON.stringify(this.props.selectedEnterpriseContact)}`);
     const { userList } = this.props.selectedEnterpriseContact || {};
-    if (process.env.BROWSER) alert(`$$$::${JSON.stringify(userList)}`);
-    if (process.env.BROWSER) alert(`$$$##::${JSON.stringify(this.props.selectedEnterpriseContact.userList)}`);
+    // if (process.env.BROWSER) alert(`$$$::${JSON.stringify(userList)}`);
+    // if (process.env.BROWSER) alert(`$$$##::${JSON.stringify(this.props.selectedEnterpriseContact.userList)}`);
     if (!userList || !userList.length) return '请选择';
-    if (process.env.BROWSER) alert(`####$$：：${JSON.stringify(userList.map(user => user))}`);
-    if (process.env.BROWSER) alert(`####$$：：${JSON.stringify(userList.map(user => user.id))}`);
+    // if (process.env.BROWSER) alert(`####$$：：${JSON.stringify(userList.map(user => user))}`);
+    // if (process.env.BROWSER) alert(`####$$：：${JSON.stringify(userList.map(user => user.id))}`);
     return userList.map(user => (
       <img src={user.photo} alt={user.name} key={user.id} />
     ));
