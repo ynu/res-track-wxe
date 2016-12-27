@@ -74,7 +74,7 @@ class AddState extends React.Component {
               return;
             }
             alert(res.result);
-            this.props.selectEnterpriseContact(res.result);
+            this.props.selectEnterpriseContact(result);
           });
         });
       };
