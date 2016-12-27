@@ -26,6 +26,20 @@ class AddState extends React.Component {
     selectEnterpriseContact: React.PropTypes.func,
     selectedEnterpriseContact: PropTypes.object,
   };
+
+  static async getJsConfig(jsApiList, debug = false) {
+    const url = encodeURIComponent(window.location.href.split('#')[0]);
+    const res = await fetch(`/api/wxe-auth/jsconfig?jsApiList=${JSON.stringify(jsApiList)}&url=${url}&debug=${debug}`);
+    const result = await res.json();
+    return result.data;
+  }
+
+  static async getGroupConfig() {
+    const url = encodeURIComponent(window.location.href.split('#')[0]);
+    const res = await fetch(`/api/wxe-auth/groupConfig?url=${url}`);
+    const result = await res.json();
+    return result.data;
+  }
   async componentDidMount() {
     const { getResource, resId } = this.props;
     getResource(resId);
@@ -37,19 +51,16 @@ class AddState extends React.Component {
    * 配置微信企业号JSSDK
    */
   async configWx() {
-    const jsApiList = ['openEnterpriseContact'];
-    const url = encodeURIComponent(window.location.href.split('#')[0]);
-    let res = await fetch(`/api/wxe-auth/jsconfig?jsApiList=${JSON.stringify(jsApiList)}&url=${url}&debug=true`);
-    const result = await res.json();
-    wx.config(result.data);
+    const jsConfig = await AddState.getJsConfig(['openEnterpriseContact'], true);
+    wx.config(jsConfig);
+
+    const groupConfig = await AddState.getGroupConfig();
     wx.ready(async () => {
-      res = await fetch(`/api/wxe-auth/groupConfig?url=${url}`);
-      const result2 = await res.json();
       document.querySelector('#btnTest').onclick = () => {
         const { userList } = this.props.selectedEnterpriseContact;
         evalWXjsApi(() => {
           WeixinJSBridge.invoke('openEnterpriseContact', {
-            ...result2.data,
+            ...groupConfig,
             params: {
               departmentIds: [0],    // 非必填，可选部门ID列表（如果ID为0，表示可选管理组权限下所有部门）
                       // 'tagIds' : [1],    // 非必填，可选标签ID列表（如果ID为0，表示可选所有标签）
@@ -81,22 +92,11 @@ class AddState extends React.Component {
     });
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (alert) alert(JSON.stringify(this.props.selectedEnterpriseContact));
-  // }
-
   renderSelectedUser() {
-    // if (process.env.BROWSER) alert(`####::${JSON.stringify(this.props.selectedEnterpriseContact)}`);
     const { userList } = this.props.selectedEnterpriseContact || {};
-    // if (process.env.BROWSER) alert(`$$$::${JSON.stringify(userList)}`);
-    // if (process.env.BROWSER) alert(`$$$##::${JSON.stringify(this.props.selectedEnterpriseContact.userList)}`);
     if (!userList || !userList.length) return '请选择';
-    // if (process.env.BROWSER) alert(`####$$：：${JSON.stringify(userList.map(user => user))}`);
-    // if (process.env.BROWSER) alert(`####$$：：${JSON.stringify(userList.map(user => user.id))}`);
     return userList.map(user => (
-      <div style={{ margin: '1px' }} key={user.id} width="32px" height="32px" >
-        <img src={user.photo} alt={user.name} />
-      </div>
+      <img src={user.photo} alt={user.name} style={{ margin: '1px' }} key={user.id} />
     ));
   }
 

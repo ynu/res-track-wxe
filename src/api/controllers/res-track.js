@@ -6,7 +6,7 @@ import { Router } from 'express';
 import expressJwt from 'express-jwt';
 import { ObjectId } from 'mongodb';
 import { SUCCESS, SERVER_FAILED } from 'nagu-validates';
-import { resourceManager, auth } from '../../config';
+import { resourceManager, auth, resCatagoryManager } from '../../config';
 import * as wxeAuth from '../controllers/wxe-auth-middlewares';
 import { sendText } from './wxe-middlewares';
 
@@ -117,7 +117,12 @@ router.put('/:id/state',
   sendText(
     req => req.newState.sendTo,
     () => auth.wxent.agentId,
-    () => '更新State成功',
+    async req => {
+      const resource = await resourceManager.findById(new ObjectId(req.params.id));
+      const catagoies = await resCatagoryManager.find({});
+      const catagory = catagoies.find(cat => cat._id === resource.catagory);
+      return `【${resource.name}(${catagory})】状态已更新为:"${req.newState.note}"。详情请点击 http://res-track.itc.ynu.edu.cn/${resource._id}`;
+    },
     (req, res) => res.send({ ret: SUCCESS, data: req.newState._id }),
   ),
 );
