@@ -8,6 +8,7 @@ import { ObjectId } from 'mongodb';
 import { SUCCESS, SERVER_FAILED } from 'nagu-validates';
 import { resourceManager, auth } from '../../config';
 import * as wxeAuth from '../controllers/wxe-auth-middlewares';
+import { sendText } from './wxe-middlewares';
 
 const router = new Router();
 
@@ -89,25 +90,36 @@ router.put('/:id/state',
     credentialsRequired: true,
     getToken: wxeAuth.getToken,
   }),
-  async (req, res) => {
+  async (req, res, next) => {
     console.log(req.body);
     const userId = req.user.UserId;
     const resId = req.params.id;
-    const { catagory, note, files } = req.body;
+    const { catagory, note, files, sendTo } = req.body;
     try {
-      const _id = new ObjectId();
-      await resourceManager.addState(new ObjectId(resId), {
-        _id,
+      const newState = {
+        _id: new ObjectId(),
         catagory,
         note,
         files,
         creator: { userId },
-      });
-      res.send({ ret: SUCCESS, data: _id });
+        sendTo,
+      };
+      await resourceManager.addState(new ObjectId(resId), newState);
+
+      if (sendTo) {
+        req.newState = newState;
+        next();
+      } else res.send({ ret: SUCCESS, data: newState._id });
     } catch (msg) {
       res.send({ ret: SERVER_FAILED, msg });
     }
   },
+  sendText(
+    req => req.newState.sendTo,
+    () => auth.wxent.agentId,
+    () => '更新State成功',
+    (req, res) => res.send({ ret: SUCCESS, data: req.newState._id }),
+  ),
 );
 
 export default router;
