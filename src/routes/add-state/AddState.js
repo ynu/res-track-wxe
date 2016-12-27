@@ -94,7 +94,9 @@ class AddState extends React.Component {
     // if (process.env.BROWSER) alert(`####$$：：${JSON.stringify(userList.map(user => user))}`);
     // if (process.env.BROWSER) alert(`####$$：：${JSON.stringify(userList.map(user => user.id))}`);
     return userList.map(user => (
-      <img src={user.photo} alt={user.name} key={user.id} />
+      <div style={{ margin: '1px' }} key={user.id} width="32px" height="32px" >
+        <img src={user.photo} alt={user.name} />
+      </div>
     ));
   }
 
