@@ -86,9 +86,10 @@ class AddState extends React.Component {
   // }
 
   renderSelectedUser() {
-    // if (process.env.BROWSER) alert(`####::${JSON.stringify(this.props.selectedEnterpriseContact)}`);
+    if (process.env.BROWSER) alert(`####::${JSON.stringify(this.props.selectedEnterpriseContact)}`);
     const { userList } = this.props.selectedEnterpriseContact || {};
     if (process.env.BROWSER) alert(`$$$::${JSON.stringify(userList)}`);
+    if (process.env.BROWSER) alert(`$$$##::${JSON.stringify(this.props.selectedEnterpriseContact.userList)}`);
     if (!userList || !userList.length) return '请选择';
     if (process.env.BROWSER) alert(`####$$：：${JSON.stringify(userList.map(user => user))}`);
     if (process.env.BROWSER) alert(`####$$：：${JSON.stringify(userList.map(user => user.id))}`);
