@@ -22,6 +22,10 @@ const evalWXjsApi = function (jsApiFun) {
 
 class AddState extends React.Component {
 
+  static propTypes = {
+    selectEnterpriseContact: React.PropTypes.func,
+    selectedEnterpriseContact: PropTypes.object,
+  };
   async componentDidMount() {
     const { getResource, resId } = this.props;
     getResource(resId);
@@ -77,11 +81,12 @@ class AddState extends React.Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (alert) alert(JSON.stringify(this.props.selectedEnterpriseContact));
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (alert) alert(JSON.stringify(this.props.selectedEnterpriseContact));
+  // }
 
   renderSelectedUser() {
+    alert(`####::${JSON.stringify(this.props.selectedEnterpriseContact)}`);
     const { userList } = this.props.selectedEnterpriseContact || {};
     if (!userList || !userList.length) return '请选择';
 
@@ -103,7 +108,7 @@ class AddState extends React.Component {
       state: {
         ...values.state,
         files: this.props.files.map(file => file.serverId),
-        sendTo: selectedEnterpriseContact.map(user => (user.id)),
+        sendTo: selectedEnterpriseContact.userList.map(user => (user.id)),
       },
     });
     return (

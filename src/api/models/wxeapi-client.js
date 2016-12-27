@@ -85,14 +85,6 @@ class WxeApi {
 
   static signGroupTicket(nonceStr, groupTicket, timestamp, url) {
     const string = `group_ticket=${groupTicket}&noncestr=${nonceStr}&timestamp=${timestamp}&url=${url}`;
-    const string2 = WxeApi.raw({
-      group_ticket: groupTicket,
-      nonceStr,
-      timestamp: `${timestamp}`,
-      url,
-    });
-    console.log(string);
-    console.log('###########WWWW', string === string2);
     const shasum = crypto.createHash('sha1');
     shasum.update(string);
     return shasum.digest('hex');
