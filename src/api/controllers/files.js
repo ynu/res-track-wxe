@@ -9,6 +9,7 @@ import { SUCCESS, SERVER_FAILED } from 'nagu-validates';
 import multer from 'multer';
 import path from 'path';
 import imageType from 'image-type';
+import fs from 'fs';
 import { resourceManager, auth, fileManager } from '../../config';
 import * as wxeAuth from '../controllers/wxe-auth-middlewares';
 
@@ -35,9 +36,24 @@ router.put('/',
 );
 
 router.get('/:fileId',
+  // 确保文件夹存在
+  (req, res, next) => {
+    try {
+      fs.statSync(path.resolve(__dirname, 'public/files/'));
+    } catch (e) {
+      fs.mkdir(path.resolve(__dirname, 'public/files/'));
+    }
+    next();
+  },
   async (req, res) => {
-    const fileBuffer = await fileManager.readFile(new ObjectId(req.params.fileId));
+    const { fileId } = req.params;
+    const fileBuffer = await fileManager.readFile(new ObjectId(fileId));
     const fileInfo = imageType(fileBuffer);
+
+    // 将数据保存到文件中
+    const fd = fs.openSync(path.resolve(__dirname, `public/files/${fileId}`), 'w+');
+    fs.write(fd, fileBuffer);
+
     res.set('Content-Type', fileInfo.mime);
     res.send(fileBuffer);
   }
