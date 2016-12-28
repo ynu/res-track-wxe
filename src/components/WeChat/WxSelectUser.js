@@ -30,15 +30,6 @@ class WxSelectUser extends React.Component {
     const groupConfig = await WxSelectUser.getGroupConfig();
     wx.ready(async () => {
       jssdkReady();
-      const evalWXjsApi = (jsApiFun) => {
-        if (typeof WeixinJSBridge === 'object' && typeof WeixinJSBridge.invoke === 'function') {
-          alert(JSON.stringify(this.props.selectedUserIds));
-          jsApiFun();
-        } else {
-          document.attachEvent && document.attachEvent('WeixinJSBridgeReady', jsApiFun);
-          document.addEventListener && document.addEventListener('WeixinJSBridgeReady', jsApiFun);
-        }
-      };
       const args = {
         ...groupConfig,
         params: {
@@ -48,6 +39,16 @@ class WxSelectUser extends React.Component {
           selectedUserIds: this.props.selectedUserIds,
         },
       };
+      const evalWXjsApi = (jsApiFun) => {
+        if (typeof WeixinJSBridge === 'object' && typeof WeixinJSBridge.invoke === 'function') {
+          alert(JSON.stringify(args.params.selectedUserIds));
+          jsApiFun();
+        } else {
+          document.attachEvent && document.attachEvent('WeixinJSBridgeReady', jsApiFun);
+          document.addEventListener && document.addEventListener('WeixinJSBridgeReady', jsApiFun);
+        }
+      };
+
       const cb = res => {
         if (!res) return;
         if (res.err_msg.indexOf('function_not_exist') > -1) {
