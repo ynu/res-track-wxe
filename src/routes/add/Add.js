@@ -37,7 +37,7 @@ const Add = (props) => {
   return (
     <Container>
       <EnsureSingup />
-      <WeChat.WxConfig debug jsApiList={['openEnterpriseContact']} />
+      <WeChat.WxConfig jsApiList={['openEnterpriseContact']} />
       <WeChat.WxSelectUser
         bind={func => (document.querySelector('#btnTest').onclick = func)}
         selectedUserIds={selectedEnterpriseContact.userList.map(user => (user.id))}

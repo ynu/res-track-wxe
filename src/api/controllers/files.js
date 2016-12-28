@@ -52,7 +52,8 @@ router.get('/:fileId',
 
     // 将数据保存到文件中
     const fd = fs.openSync(path.resolve(__dirname, `public/files/${fileId}`), 'w+');
-    fs.write(fd, fileBuffer);
+    fs.writeSync(fd, fileBuffer);
+    fs.close(fd);
 
     res.set('Content-Type', fileInfo.mime);
     res.send(fileBuffer);

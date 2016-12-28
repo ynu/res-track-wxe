@@ -32,6 +32,7 @@ export const sendNews = (
     const agentid = getAgentId(req, res);
     const articles = await getArticles(req, res);
     const result = await wxeapi.sendNews(to, agentid, articles);
+    console.log(result);
     if (result.errcode === 0) success(result, req, res, next);
     else fail(result, req, res, next);
   } catch (msg) {

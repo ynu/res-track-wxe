@@ -44,14 +44,14 @@ class AddState extends React.Component {
       state: {
         ...values.state,
         files: this.props.files.map(file => file.serverId),
-        sendTo: ['na57'],
-        // sendTo: selectedEnterpriseContact.userList.map(user => (user.id)),
+        // sendTo: ['na57'],
+        sendTo: selectedEnterpriseContact.userList.map(user => (user.id)),
       },
     });
     return (
       <Container>
         <EnsureSingup />
-        <WeChat.WxConfig debug jsApiList={['openEnterpriseContact']} />
+        <WeChat.WxConfig jsApiList={['openEnterpriseContact']} />
         <WeChat.WxSelectUser
           bind={ func => (document.querySelector('#btnTest').onclick = func)}
           selectedUserIds={ selectedEnterpriseContact.userList.map(user => (user.id)) }
