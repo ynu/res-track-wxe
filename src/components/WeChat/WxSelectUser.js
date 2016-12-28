@@ -24,8 +24,8 @@ class WxSelectUser extends React.Component {
   };
 
   async componentDidMount() {
-    const { selectedUserIds, mode, onFinish, bind } = this.props;
-    const groupConfig = await WxSelectUser.getGroupConfig();
+    const { mode, onFinish, bind } = this.props;
+    this.groupConfig = await WxSelectUser.getGroupConfig();
     wx.ready(async () => {
       const invoke = WxSelectUser.getInvoker(
         'openEnterpriseContact',
@@ -35,7 +35,7 @@ class WxSelectUser extends React.Component {
             departmentIds: [0],    // 非必填，可选部门ID列表（如果ID为0，表示可选管理组权限下所有部门）
             mode,    // 必填，选择模式，single表示单选，multi表示多选
             type: ['user'],    // 必填，选择限制类型，指定department、tag、user中的一个或者多个
-            selectedUserIds,
+            selectedUserIds: this.props.selectedUserIds,
           },
         },
         res => {
