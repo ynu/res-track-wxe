@@ -6,9 +6,9 @@ import { Router } from 'express';
 import expressJwt from 'express-jwt';
 import { ObjectId } from 'mongodb';
 import { SUCCESS, SERVER_FAILED } from 'nagu-validates';
-import { resourceManager, auth, resCatagoryManager } from '../../config';
+import { resourceManager, auth, resCatagoryManager, host } from '../../config';
 import * as wxeAuth from '../controllers/wxe-auth-middlewares';
-import { sendText } from './wxe-middlewares';
+import { sendNews } from './wxe-middlewares';
 
 const router = new Router();
 
@@ -91,7 +91,6 @@ router.put('/:id/state',
     getToken: wxeAuth.getToken,
   }),
   async (req, res, next) => {
-    console.log(req.body);
     const userId = req.user.UserId;
     const resId = req.params.id;
     const { catagory, note, files, sendTo } = req.body;
@@ -111,19 +110,29 @@ router.put('/:id/state',
         next();
       } else res.send({ ret: SUCCESS, data: newState._id });
     } catch (msg) {
+      console.log(msg);
       res.send({ ret: SERVER_FAILED, msg });
     }
   },
-  sendText(
-    req => req.newState.sendTo,
+  sendNews(
+    req => ({ touser: req.newState.sendTo }),
     () => auth.wxent.agentId,
     async req => {
       const resource = await resourceManager.findById(new ObjectId(req.params.id));
       const catagoies = await resCatagoryManager.find({});
       const catagory = catagoies.find(cat => cat._id === resource.catagory);
-      return `【${resource.name}(${catagory})】状态已更新为:"${req.newState.note}"。详情请点击 http://res-track.itc.ynu.edu.cn/${resource._id}`;
+      let picurl = catagory.imageUrl;
+      if (req.body.files && req.body.files.length) {
+        picurl = `http://${host}/api/files/${req.body.files[0]}`;
+      }
+      return [{
+        title: `【状态更新】${resource.name}(${catagory.title})`,
+        description: req.newState.note,
+        url: `http://${host}/detail/${resource._id}`,
+        picurl,
+      }];
     },
-    (req, res) => res.send({ ret: SUCCESS, data: req.newState._id }),
+    (result, req, res) => res.send({ ret: SUCCESS, data: req.newState._id }),
   ),
 );
 

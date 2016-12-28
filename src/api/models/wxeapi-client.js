@@ -250,6 +250,14 @@ class WxeApi {
     });
   }
 
+  sendNews(to, agentid, articles) {
+    return this.sendMessage(to, {
+      agentid,
+      msgtype: 'news',
+      news: { articles },
+    });
+  }
+
   sendTextCard(to, agentid, textcard) {
     return this.sendMessage(to, {
       agentid,

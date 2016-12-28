@@ -44,7 +44,7 @@ export const auth = {
   wxent: {
     corpId: process.env.WXE_CORPID,
     secret: process.env.WXE_SECRET,
-    angetId: process.env.WXE_AGENTID || 28,
+    agentId: process.env.WXE_AGENTID || 28,
   },
 
 };
