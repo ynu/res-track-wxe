@@ -22,6 +22,7 @@ class WxSelectUser extends React.Component {
     mode: 'multi',
     selectedUserIds: [],
   };
+
   async componentDidMount() {
     const { selectedUserIds, mode, onFinish, bind } = this.props;
     const groupConfig = await WxSelectUser.getGroupConfig();
@@ -46,10 +47,6 @@ class WxSelectUser extends React.Component {
             return;
           }
           const result = JSON.parse(res.result);    // 返回字符串，开发者需自行调用JSON.parse解析
-          // if (result.selectAll) {
-          //   alert('系统暂不支持选择全部，请重新选择');
-          //   return;
-          // }
           onFinish(result);
         }
       );

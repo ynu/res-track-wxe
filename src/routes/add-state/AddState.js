@@ -9,9 +9,8 @@ import * as actions from '../../actions/detail';
 import * as fileActions from '../../actions/files';
 import * as wechatActions from '../../actions/wechat';
 import Footer from '../common/Footer';
-import fetch from '../../core/fetch';
-import WxConfig from '../../components/WeChat/WxConfig';
-import WxSelectUser from '../../components/WeChat/WxSelectUser';
+import WeChat from '../../components/WeChat';
+
 class AddState extends React.Component {
 
   static propTypes = {
@@ -19,107 +18,9 @@ class AddState extends React.Component {
     selectedEnterpriseContact: PropTypes.object,
   };
 
-  static async getGroupConfig() {
-    const url = encodeURIComponent(window.location.href.split('#')[0]);
-    const res = await fetch(`/api/wxe-auth/groupConfig?url=${url}`);
-    const result = await res.json();
-    return result.data;
-  }
-
-  static getInvoker(funcName, args, cb) {
-    const evalWXjsApi = (jsApiFun) => {
-      if (typeof WeixinJSBridge === 'object' && typeof WeixinJSBridge.invoke === 'function') {
-        jsApiFun();
-      } else {
-        document.attachEvent && document.attachEvent('WeixinJSBridgeReady', jsApiFun);
-        document.addEventListener && document.addEventListener('WeixinJSBridgeReady', jsApiFun);
-      }
-    };
-    return () => evalWXjsApi(() => WeixinJSBridge.invoke(funcName, args, cb));
-  }
   async componentDidMount() {
     const { getResource, resId } = this.props;
     getResource(resId);
-
-    this.configWx();
-  }
-
-  /**
-   * 配置微信企业号JSSDK
-   */
-  async configWx() {
-    // const groupConfig = await AddState.getGroupConfig();
-    // wx.ready(async () => {
-    //   document.querySelector('#btnTest').onclick = AddState.getInvoker(
-    //     'openEnterpriseContact',
-    //     {
-    //       ...groupConfig,
-    //       params: {
-    //         departmentIds: [0],    // 非必填，可选部门ID列表（如果ID为0，表示可选管理组权限下所有部门）
-    //         mode: 'multi',    // 必填，选择模式，single表示单选，multi表示多选
-    //         type: ['user'],    // 必填，选择限制类型，指定department、tag、user中的一个或者多个
-    //         selectedUserIds: this.props.selectedEnterpriseContact.userList.map(user => user.id),
-    //       },
-    //     },
-    //     res => {
-    //       if (!res) return;
-    //       if (res.err_msg.indexOf('function_not_exist') > -1) {
-    //         alert('版本过低请升级');
-    //       } else if (res.err_msg.indexOf('openEnterpriseContact:fail') > -1) {
-    //         alert(JSON.stringify(res));
-    //         return;
-    //       }
-    //       const result = JSON.parse(res.result);    // 返回字符串，开发者需自行调用JSON.parse解析
-    //       if (result.selectAll) {
-    //         alert('系统暂不支持选择全部，请重新选择');
-    //         return;
-    //       }
-    //       this.props.selectEnterpriseContact(result);
-    //     }
-    //   );
-    // });
-    // wx.ready(async () => {
-    //   const evalWXjsApi = (jsApiFun) => {
-    //     if (typeof WeixinJSBridge === 'object' && typeof WeixinJSBridge.invoke === 'function') {
-    //       jsApiFun();
-    //     } else {
-    //       document.attachEvent && document.attachEvent('WeixinJSBridgeReady', jsApiFun);
-    //       document.addEventListener && document.addEventListener('WeixinJSBridgeReady', jsApiFun);
-    //     }
-    //   };
-    //   document.querySelector('#btnTest').onclick = () => {
-    //     const { userList } = this.props.selectedEnterpriseContact;
-    //     evalWXjsApi(() => {
-    //       WeixinJSBridge.invoke('openEnterpriseContact', {
-    //         ...groupConfig,
-    //         params: {
-    //           departmentIds: [0],    // 非必填，可选部门ID列表（如果ID为0，表示可选管理组权限下所有部门）
-    //                   // 'tagIds' : [1],    // 非必填，可选标签ID列表（如果ID为0，表示可选所有标签）
-    //                   // 'userIds' : ['zhangsan','lisi'],    // 非必填，可选用户ID列表
-    //           mode: 'multi',    // 必填，选择模式，single表示单选，multi表示多选
-    //           type: ['user'],    // 必填，选择限制类型，指定department、tag、user中的一个或者多个
-    //           // selectedDepartmentIds: departmentList.map(dept => dept.id),    // 非必填，已选部门ID列表
-    //           // selectedTagIds: [],    // 非必填，已选标签ID列表
-    //           selectedUserIds: userList.map(user => user.id),    // 非必填，已选用户ID列表
-    //         },
-    //       }, (res) => {
-    //         if (!res) return;
-    //         if (res.err_msg.indexOf('function_not_exist') > -1) {
-    //           alert('版本过低请升级');
-    //         } else if (res.err_msg.indexOf('openEnterpriseContact:fail') > -1) {
-    //           alert(JSON.stringify(res));
-    //           return;
-    //         }
-    //         const result = JSON.parse(res.result);    // 返回字符串，开发者需自行调用JSON.parse解析
-    //         if (result.selectAll) {
-    //           alert('系统暂不支持选择全部，请重新选择');
-    //           return;
-    //         }
-    //         this.props.selectEnterpriseContact(result);
-    //       });
-    //     });
-    //   };
-    // });
   }
 
   renderSelectedUser() {
@@ -150,10 +51,17 @@ class AddState extends React.Component {
     return (
       <Container>
         <EnsureSingup />
-        <WxConfig debug jsApiList={['openEnterpriseContact']} />
-        <WxSelectUser
+        <WeChat.WxConfig debug jsApiList={['openEnterpriseContact']} />
+        <WeChat.WxSelectUser
           bind={ func => (document.querySelector('#btnTest').onclick = func)}
-          onFinish={ result => selectEnterpriseContact(result)}
+          selectedUserIds={ selectedEnterpriseContact.userList.map(user => (user.id)) }
+          onFinish={ result => {
+            if (result.selectAll) {
+              alert('系统暂不支持选择全部，请重新选择');
+              return;
+            }
+            selectEnterpriseContact(result);
+          }}
         />
         <PageHeader name={resource.name} {...resource.currentState} />
         <div className="page__bd">
