@@ -29,8 +29,8 @@ router.get('/me',
 router.get('/jsconfig', async (req, res) => {
   try {
     const data = await wxapi.getJsConfig({
-      debug: false,
       ...req.query,
+      debug: req.query.debug === 'true',
       jsApiList: JSON.parse(req.query.jsApiList),
     });
     res.send({ ret: SUCCESS, data });
