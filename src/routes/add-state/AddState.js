@@ -24,7 +24,9 @@ class AddState extends React.Component {
   }
 
   renderSelectedUser() {
-    const { userList } = this.props.selectedEnterpriseContact || {};
+    const { jssdk, selectedEnterpriseContact } = this.props;
+    if (!jssdk.isReady) return '正在加载组件';
+    const { userList } = selectedEnterpriseContact || {};
     if (!userList || !userList.length) return '请选择';
     return userList.map(user => (
       <img src={user.photo} alt={user.name} style={{ margin: '1px' }} key={user.id} />
@@ -37,7 +39,7 @@ class AddState extends React.Component {
       this.props.remove(removedFile.serverId);
     };
     const { Container, Button, ButtonArea, CellsTitle, Toast, Uploader, Cells, Cell, CellBody, CellFooter } = weui;
-    const { handleSubmit, noteLength, addState, resource, loading, selectedEnterpriseContact,selectEnterpriseContact } = this.props;
+    const { handleSubmit, noteLength, addState, resource, loading, selectedEnterpriseContact, selectEnterpriseContact } = this.props;
 
     const add = values => addState({
       ...values,
@@ -53,9 +55,9 @@ class AddState extends React.Component {
         <EnsureSingup />
         <WeChat.WxConfig jsApiList={['openEnterpriseContact']} />
         <WeChat.WxSelectUser
-          bind={ func => (document.querySelector('#btnTest').onclick = func)}
-          selectedUserIds={ selectedEnterpriseContact.userList.map(user => (user.id)) }
-          onFinish={ result => {
+          bind={func => (document.querySelector('#btnTest').onclick = func)}
+          selectedUserIds={selectedEnterpriseContact.userList.map(user => (user.id))}
+          onFinish={result => {
             if (result.selectAll) {
               alert('系统暂不支持选择全部，请重新选择');
               return;
