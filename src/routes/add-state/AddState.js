@@ -10,21 +10,14 @@ import * as fileActions from '../../actions/files';
 import * as wechatActions from '../../actions/wechat';
 import Footer from '../common/Footer';
 import fetch from '../../core/fetch';
-
-
+import WxConfig from '../../components/WeChat/WxConfig';
+import WxSelectUser from '../../components/WeChat/WxSelectUser';
 class AddState extends React.Component {
 
   static propTypes = {
     selectEnterpriseContact: React.PropTypes.func,
     selectedEnterpriseContact: PropTypes.object,
   };
-
-  static async getJsConfig(jsApiList, debug = false) {
-    const url = encodeURIComponent(window.location.href.split('#')[0]);
-    const res = await fetch(`/api/wxe-auth/jsconfig?jsApiList=${JSON.stringify(jsApiList)}&url=${url}&debug=${debug}`);
-    const result = await res.json();
-    return result.data;
-  }
 
   static async getGroupConfig() {
     const url = encodeURIComponent(window.location.href.split('#')[0]);
@@ -55,39 +48,36 @@ class AddState extends React.Component {
    * 配置微信企业号JSSDK
    */
   async configWx() {
-    const jsConfig = await AddState.getJsConfig(['openEnterpriseContact'], true);
-    wx.config(jsConfig);
-
-    const groupConfig = await AddState.getGroupConfig();
-    wx.ready(async () => {
-      document.querySelector('#btnTest').onclick = AddState.getInvoker(
-        'openEnterpriseContact',
-        {
-          ...groupConfig,
-          params: {
-            departmentIds: [0],    // 非必填，可选部门ID列表（如果ID为0，表示可选管理组权限下所有部门）
-            mode: 'multi',    // 必填，选择模式，single表示单选，multi表示多选
-            type: ['user'],    // 必填，选择限制类型，指定department、tag、user中的一个或者多个
-            selectedUserIds: this.props.selectedEnterpriseContact.userList.map(user => user.id),
-          },
-        },
-        res => {
-          if (!res) return;
-          if (res.err_msg.indexOf('function_not_exist') > -1) {
-            alert('版本过低请升级');
-          } else if (res.err_msg.indexOf('openEnterpriseContact:fail') > -1) {
-            alert(JSON.stringify(res));
-            return;
-          }
-          const result = JSON.parse(res.result);    // 返回字符串，开发者需自行调用JSON.parse解析
-          if (result.selectAll) {
-            alert('系统暂不支持选择全部，请重新选择');
-            return;
-          }
-          this.props.selectEnterpriseContact(result);
-        }
-      );
-    });
+    // const groupConfig = await AddState.getGroupConfig();
+    // wx.ready(async () => {
+    //   document.querySelector('#btnTest').onclick = AddState.getInvoker(
+    //     'openEnterpriseContact',
+    //     {
+    //       ...groupConfig,
+    //       params: {
+    //         departmentIds: [0],    // 非必填，可选部门ID列表（如果ID为0，表示可选管理组权限下所有部门）
+    //         mode: 'multi',    // 必填，选择模式，single表示单选，multi表示多选
+    //         type: ['user'],    // 必填，选择限制类型，指定department、tag、user中的一个或者多个
+    //         selectedUserIds: this.props.selectedEnterpriseContact.userList.map(user => user.id),
+    //       },
+    //     },
+    //     res => {
+    //       if (!res) return;
+    //       if (res.err_msg.indexOf('function_not_exist') > -1) {
+    //         alert('版本过低请升级');
+    //       } else if (res.err_msg.indexOf('openEnterpriseContact:fail') > -1) {
+    //         alert(JSON.stringify(res));
+    //         return;
+    //       }
+    //       const result = JSON.parse(res.result);    // 返回字符串，开发者需自行调用JSON.parse解析
+    //       if (result.selectAll) {
+    //         alert('系统暂不支持选择全部，请重新选择');
+    //         return;
+    //       }
+    //       this.props.selectEnterpriseContact(result);
+    //     }
+    //   );
+    // });
     // wx.ready(async () => {
     //   const evalWXjsApi = (jsApiFun) => {
     //     if (typeof WeixinJSBridge === 'object' && typeof WeixinJSBridge.invoke === 'function') {
@@ -146,7 +136,7 @@ class AddState extends React.Component {
       this.props.remove(removedFile.serverId);
     };
     const { Container, Button, ButtonArea, CellsTitle, Toast, Uploader, Cells, Cell, CellBody, CellFooter } = weui;
-    const { handleSubmit, noteLength, addState, resource, loading, selectedEnterpriseContact } = this.props;
+    const { handleSubmit, noteLength, addState, resource, loading, selectedEnterpriseContact,selectEnterpriseContact } = this.props;
 
     const add = values => addState({
       ...values,
@@ -160,6 +150,11 @@ class AddState extends React.Component {
     return (
       <Container>
         <EnsureSingup />
+        <WxConfig debug jsApiList={['openEnterpriseContact']} />
+        <WxSelectUser
+          bind={ func => (document.querySelector('#btnTest').onclick = func)}
+          onFinish={ result => selectEnterpriseContact(result)}
+        />
         <PageHeader name={resource.name} {...resource.currentState} />
         <div className="page__bd">
           <CellsTitle>新状态</CellsTitle>
