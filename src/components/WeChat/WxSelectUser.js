@@ -1,4 +1,6 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+import * as wechatActions from '../../actions/wechat';
 
 class WxSelectUser extends React.Component {
   static async getGroupConfig() {
@@ -24,9 +26,10 @@ class WxSelectUser extends React.Component {
   };
 
   async componentDidMount() {
-    const { mode, onFinish, bind } = this.props;
-    this.groupConfig = await WxSelectUser.getGroupConfig();
+    const { mode, onFinish, bind, jssdkReady } = this.props;
+    const groupConfig = await WxSelectUser.getGroupConfig();
     wx.ready(async () => {
+      jssdkReady();
       const invoke = WxSelectUser.getInvoker(
         'openEnterpriseContact',
         {
@@ -58,4 +61,6 @@ class WxSelectUser extends React.Component {
   }
 }
 
-export default WxSelectUser;
+export default connect(null, {
+  ...wechatActions,
+})(WxSelectUser);

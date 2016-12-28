@@ -1,4 +1,6 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+import * as wechatActions from '../../actions/wechat';
 
 class WxConfig extends React.Component {
   static async getJsConfig(jsApiList, debug = false) {
@@ -9,13 +11,16 @@ class WxConfig extends React.Component {
   }
 
   async componentDidMount() {
-    const { debug, jsApiList } = this.props;
+    const { debug, jsApiList, jssdkConfig } = this.props;
     const jsConfig = await WxConfig.getJsConfig(jsApiList, debug);
     wx.config(jsConfig);
+    jssdkConfig(jsConfig);
   }
   render() {
     return null;
   }
 }
 
-export default WxConfig;
+export default connect(null, {
+  ...wechatActions,
+})(WxConfig);
