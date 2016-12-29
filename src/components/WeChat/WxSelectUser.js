@@ -41,7 +41,6 @@ class WxSelectUser extends React.Component {
       };
       const evalWXjsApi = (jsApiFun) => {
         if (typeof WeixinJSBridge === 'object' && typeof WeixinJSBridge.invoke === 'function') {
-          alert(JSON.stringify(args.params.selectedUserIds));
           jsApiFun();
         } else {
           document.attachEvent && document.attachEvent('WeixinJSBridgeReady', jsApiFun);
