@@ -23,9 +23,6 @@ class Detail extends React.Component {
         <EnsureSingup />
         <PageHeader name={name} {...currentState} />
         <div className="page__bd">
-          <div className="weui-loadmore weui-loadmore_line">
-            <span className="weui-loadmore__tips" />
-          </div>
           <StatePanel states={states.reverse()} resId={_id} />
         </div>
         <Footer />

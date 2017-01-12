@@ -8,12 +8,12 @@ const ResItem = ({ _id, catagory, currentState, name }) => {
   return (
     <a className="weui-cell weui-cell_access" href={`/Detail/${_id}`} style={{ backgroundColor }} >
       <div className="weui-cell__hd">
-        <img src={getCatagoryImage(catagory)} alt="" style={{ marginRight: '5px', display: 'block' }} />
+        <img src={getCatagoryImage(catagory)} alt="" style={{ marginRight: '5px', display: 'block', width: '32px', height: '32px' }} />
       </div>
       <div className="weui-cell__bd weui-cell_primary">
         <p>{name}</p>
       </div>
-      <span className="weui-cell__ft"></span>
+      <span className="weui-cell__ft" />
     </a>
   );
 };

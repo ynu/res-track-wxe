@@ -21,10 +21,9 @@ export default class Cells extends React.Component {
     };
 
     render() {
-        const {children, className, access, radio, checkbox, ...others} = this.props;
+        const {children, className, radio, checkbox, ...others} = this.props;
         const cls = classNames({
             'weui-cells': true,
-            'weui-cells_access': access,
             [className]: className
         });
 

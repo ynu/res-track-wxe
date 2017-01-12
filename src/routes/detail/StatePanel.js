@@ -19,15 +19,20 @@ const StatePanel = ({ states, resId }) => {
             const backgroundColor = getStateColor(state.catagory);
             const icon = getStateIcon(state.catagory);
             return (
-              <a href="javascript:void(0);" className="weui-media-box weui-media-box_appmsg" style={{ backgroundColor }} key={state._id}>
+              <a href={`/state/${resId}/${state._id}`} className="weui-media-box weui-media-box_appmsg" style={{ backgroundColor }} key={state._id}>
                 <div className="weui-media-box__hd">
-                  <img className="weui-media-box__thumb" alt={state.creator.userId} src={`/api/avatar/${state.creator.userId}`} />
+                  <img className="weui-media-box__thumb" alt={state.creator.userId} src={`/avatars/${state.creator.userId}.png`} />
                 </div>
                 <div className="weui-media-box__bd">
                   <h4 className="weui-media-box__title">
                     {state.creator.userId} | <TimeAgo datetime={state.date} locale="zh_CN" />
                   </h4>
-                  <p className="weui-media-box__desc">{state.note}</p>
+                  <p className="weui-media-box__desc">
+                    {state.note}
+                    {
+                      state.files && state.files.length ? ` | ${state.files.length}个附件` : null
+                    }
+                  </p>
                 </div>
               </a>
 

@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { SUCCESS, UNAUTHORIZED } from 'nagu-validates';
 import NeedSignup from '../../components/Auth/NeedSignup';
 import fetch from '../../core/fetch';
 
@@ -11,7 +12,8 @@ const EnsureSignupWxe = () => {
       const res = await fetch('/api/wxe-auth/me', {
         credentials: 'same-origin',
       });
-      result = await res.json();
+      if (res.status === 401) result = { ret: UNAUTHORIZED };
+      else result = await res.json();
     } catch (e) {
       // 服务器错误
       return { ret: 999, msg: e };

@@ -15,7 +15,9 @@ export default class Uploader extends React.Component {
         onChange: PropTypes.func,
         onError: PropTypes.func,
         files: PropTypes.array,
-        lang: PropTypes.object
+        lang: PropTypes.object,
+        enableUpload: PropTypes.bool,
+        enableRemove: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -27,9 +29,19 @@ export default class Uploader extends React.Component {
         onError: undefined,
         lang:{
             maxError: maxCount => `最多只能上传${maxCount}张图片`
-        }
+        },
+        onRemove: () => null,
+        enableUpload: true,
+        enableRemove: true,
     };
 
+    constructor(props) {
+      super(props);
+      this.state = {
+        showGallery: false,
+        galleryImg: {},
+      };
+    }
     /**
      * Detecting vertical squash in loaded image.
      * Fixes a bug which squash image vertically while drawing into canvas for some images.
@@ -170,16 +182,24 @@ export default class Uploader extends React.Component {
                 backgroundImage: `url(${url})`
             };
             let cls = classNames({
-                weui_uploader_file: true,
-                weui_uploader_status: error || status
+                'weui-uploader__file': true,
+                'weui-uploader__file_status': error || status
             });
 
+            const liOnClick = e => {
+              const index = parseInt(e.target.getAttribute('data-index'), 10);
+              this.setState({
+                showGallery: true,
+                galleryImg: this.props.files[index],
+                index,
+              });
+            }
             return (
-                <li className={cls} key={idx} style={fileStyle} {...others}>
+                <li className={cls} key={idx} data-index={idx} style={fileStyle} {...others} onClick={liOnClick} >
                     {
                         error || status ?
-                        <div className="weui_uploader_status_content">
-                            { error ? <i className="weui_icon_warn"></i> : status }
+                        <div className="weui-uploader__file-content">
+                            { error ? <i className="weui-icon-warn"></i> : status }
                         </div>
                         : false
                     }
@@ -189,34 +209,62 @@ export default class Uploader extends React.Component {
     }
 
     render(){
-        const { className, title, maxCount, files, onChange, ...others } = this.props;
+        const { className, title, maxCount, files, onChange, onRemove, enableUpload, enableRemove, ...others } = this.props;
         const cls = classNames({
-            weui_uploader: true,
+            'weui-uploader': true,
             [className]: className
         });
 
+        const hideGallery = () => this.setState({ showGallery: false });
+        const removeImg = () => {
+          const index = this.state.index;
+          const file = this.state.galleryImg;
+          onRemove(file, index);
+        }
+
         return (
+          <div>
+            <div className="weui-gallery"
+              style={{ display: this.state.showGallery ? 'block' : 'none', opacity: 1 }}
+              onClick={hideGallery}
+            >
+              <span className="weui-gallery__img" style={{ backgroundImage: `url(${this.state.galleryImg.url})` }}/>
+              {
+                enableRemove && (
+                  <div className="weui-gallery__opr">
+                    <a href="javascript:" className="weui-gallery__del" onClick={removeImg} >
+                      <i className="weui-icon-delete weui-icon_gallery-delete" />
+                    </a>
+                  </div>
+                )
+              }
+            </div>
             <div className={cls}>
-                <div className="weui_uploader_hd weui_cell">
-                    <div className="weui_cell_bd weui_cell_primary">{title}</div>
-                    <div className="weui_cell_ft">{files.length}/{maxCount}</div>
+                <div className="weui-uploader__hd">
+                    <p className="weui-uploader__title">{title}</p>
+                    <div className="weui-uploader__info">{files.length}/{maxCount}</div>
                 </div>
-                <div className="weui_uploader_bd">
-                    <ul className="weui_uploader_files">
+                <div className="weui-uploader__bd">
+                    <ul className="weui-uploader__files">
                         {this.renderFiles()}
                     </ul>
-                    <div className="weui_uploader_input_wrp">
-                        <input
-                        ref="uploader"//let react to reset after onchange
-                        className="weui_uploader_input"
-                        type="file"
-                        accept="image/jpg,image/jpeg,image/png,image/gif"
-                        onChange={this.handleChange.bind(this)}
-                        {...others}
-                        />
-                    </div>
+                    {
+                      enableUpload ? (
+                        <div className="weui-uploader__input-box">
+                            <input
+                            ref="uploader"//let react to reset after onchange
+                            className="weui-uploader__input"
+                            type="file"
+                            accept="image/jpg,image/jpeg,image/png,image/gif"
+                            onChange={this.handleChange.bind(this)}
+                            {...others}
+                            />
+                        </div>
+                      ) : null
+                    }
                 </div>
             </div>
+          </div>
         );
     }
 };

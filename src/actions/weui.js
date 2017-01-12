@@ -10,3 +10,10 @@ export const showConfirm = data => ({
 export const hideConfirm = () => ({
   type: HIDE_CONFIRM,
 });
+
+export const SHOW_GALLERY = 'SHOW_GALLERY';
+
+export const showGallery = file => ({
+  type: SHOW_GALLERY,
+  file,
+});

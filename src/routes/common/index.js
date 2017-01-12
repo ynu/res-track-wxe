@@ -1,7 +1,7 @@
 export const getStateColor = catagory => {
   switch (catagory) {
     case 'success':
-      return '#dff0d8';
+      return '#FFFFFF';
     case 'warning':
       return '#faebcc';
     case 'error':

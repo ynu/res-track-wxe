@@ -8,6 +8,8 @@ import list from './list';
 import resCatagories from './res-catagories';
 import confirm from './confirm';
 import detail from './detail';
+import uploader from './uploader';
+import wechat from './wechat';
 
 export default combineReducers({
   form,
@@ -17,6 +19,8 @@ export default combineReducers({
   resCatagories,
   confirm,
   detail,
+  uploader,
+  wechat,
   user,
   runtime,
 });

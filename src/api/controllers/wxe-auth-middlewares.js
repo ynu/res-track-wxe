@@ -1,24 +1,26 @@
+import jwt from 'jsonwebtoken';
 import WxeApi from '../models/wxeapi-client';
+import { auth } from '../../config';
 
 export const signin = ({
   wxeApiOpitons,
-  wxapi,
   getRedirectUrl = (req) => req.query.redirect_uri,
   getCallBackUrl = (req) => (`${req.protocol}://${req.get('Host')}${req.originalUrl}}`),
   success = (result, req, res) => {
     res.clearCookie('redirect_uri');
-    // 用户验证正确，设置用户状态为登录，返回原URL
-    res.cookie('userId', result.UserId, { maxAge: 24 * 3600 * 365000, signed: true });
 
-    // 当redirect_uri中包含中文时，可能会出错，应该进行encode操作。
+    // 用户验证正确，设置用户jwt，
+    const expiresIn = 60 * 60 * 24 * 365; // 365 days
+    const token = jwt.sign(result, auth.jwt.secret, { expiresIn });
+    res.cookie('token', token, { maxAge: 1000 * expiresIn, httpOnly: true });
+
+    // 返回原URL。当redirect_uri中包含中文时，可能会出错，应该进行encode操作。
     res.redirect(encodeURI(req.signedCookies.redirect_uri));
   },
   fail = (err, req, res) => res.send(fail),
 }) => async (req, res, next) => {
   try {
-    if (!wxapi) {
-      wxapi = new WxeApi(wxeApiOpitons); // eslint-disable-line no-param-reassign
-    }
+    const wxapi = new WxeApi(wxeApiOpitons);
     const callbackUrl = getCallBackUrl(req, res);
     // 1. 判断是否带有code参数，如果是的话，则说明已经从认证服务器返回
     if ('code' in req.query) {
@@ -88,3 +90,5 @@ export const getUserId = (
   if (userid) success(userid, req, res, next);
   else fail({ ret: -1, msg: 'not logged' }, req, res, next);
 };
+
+export const getToken = req => req.cookies.token;
